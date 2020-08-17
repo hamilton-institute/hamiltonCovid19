@@ -1,13 +1,9 @@
 Package: hamiltonCovid19
-Title: An Amazing Shiny App
+Title: Hamilton Covid-19 Dashboard
 Version: 0.0.0.9000
-Authors@R: 
-    person(given = "firstname",
-           family = "lastname",
-           role = c("aut", "cre"),
-           email = "your@email.com")
-Description: What the package does (one paragraph).
-License: What license is it under?
+Authors@R: person('R6', 'Hamilton', email = 'consultoria@rseis.com.br', role = c('cre', 'aut'))
+Description: Golem package for the Hamilton Covid-19 Dashboard.
+License: MIT + file LICENSE
 Imports: 
     config,
     golem,
