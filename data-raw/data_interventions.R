@@ -3,7 +3,7 @@
 library(dplyr)
 
 data_interventions <- readxl::read_excel(
-  'inst/extdata/xlsx/latest_interventions_data.xlsx',
+  'data-raw/xlsx/latest_interventions_data.xlsx',
   sheet = "Database"
 )
 

@@ -2,7 +2,8 @@
 
 library(dplyr)
 
-tab_global <- readr::read_rds('inst/extdata/rds/latest_global_data.rds')
+tab_global <- readr::read_rds('data-raw/rds/latest_global_data.rds') %>%
+  tibble::as_tibble()
 
 tab_global <- tab_global %>%
   mutate(

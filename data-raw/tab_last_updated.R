@@ -2,6 +2,6 @@
 
 # LF: TEMP
 
-tab_last_updated <- readr::read_csv("inst/extdata/csv/last_updated.csv")
+tab_last_updated <- readr::read_csv("data-raw/csv/last_updated.csv")
 
 usethis::use_data(tab_last_updated, overwrite = TRUE)
