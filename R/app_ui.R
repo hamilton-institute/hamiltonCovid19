@@ -9,8 +9,84 @@ app_ui <- function(request) {
     # Leave this function for adding external resources
     golem_add_external_resources(),
     # List the first level UI elements here
-    fluidPage(
-      h1("hamiltonCovid19")
+    bs4Dash::bs4DashPage(
+      navbar = create_navbar(),
+      sidebar = create_sidebar(),
+      body = create_body()
+    )
+  )
+}
+
+#' Creates app's navbar
+create_navbar <- function() {
+  bs4Dash::bs4DashNavbar(
+    skin = "dark",
+    status = "dark",
+    border = TRUE,
+    sidebarIcon = "bars",
+    compact = FALSE,
+    controlbarIcon = "th"
+  )
+}
+
+#' Creates app's sidebar
+create_sidebar <- function() {
+  customBs4DashSidebar(
+    skin = "dark",
+    status = "danger",
+    title = "Hamilton Institute",
+    brandColor = "dark",
+    url = "https://www.maynoothuniversity.ie/hamilton",
+    src = "www/maynooth_university_logo.png",
+    elevation = 1,
+    opacity = 0.8,
+    # bs4SidebarUserPanel(
+    #   img = "https://image.flaticon.com/icons/svg/1149/1149168.svg",
+    #   text = "Welcome Onboard!"
+    # ),
+    bs4Dash::bs4SidebarMenu(
+      bs4Dash::bs4SidebarMenuItem(
+        "Summary",
+        tabName = "summary",
+        icon = "dashboard"
+      ),
+      bs4Dash::bs4SidebarMenuItem(
+        "Map",
+        tabName = "map",
+        icon = "map"
+      ),
+      bs4Dash::bs4SidebarMenuItem(
+        "Graphs",
+        tabName = "map",
+        icon = "bar-chart-o"
+      ),
+      bs4Dash::bs4SidebarMenuItem(
+        "Animations",
+        tabName = "map",
+        icon = "chart-line"
+      ),
+      bs4Dash::bs4SidebarMenuItem(
+        "Interventions",
+        tabName = "map",
+        icon = "user-plus"
+      ),
+      bs4Dash::bs4SidebarMenuItem(
+        "Sources",
+        tabName = "map",
+        icon = "list-alt"
+      )
+    )
+  )
+}
+
+#' Creates app's body
+create_body <- function() {
+  bs4Dash::bs4DashBody(
+    bs4Dash::bs4TabItems(
+      bs4Dash::bs4TabItem(
+        tabName = "summary",
+        mod_summary_ui("summary_ui_1")
+      )
     )
   )
 }
