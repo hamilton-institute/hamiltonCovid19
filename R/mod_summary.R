@@ -13,33 +13,42 @@ mod_summary_ui <- function(id) {
     fluidRow(
       col_12(
         tags$h2("Ireland"),
-        tags$hr(),
+        tags$hr()
+      )
+    ),
+    fluidRow(
+      col_8(
         fluidRow(
           col_6(
-            fluidRow(
-              shinycssloaders::withSpinner(
-                bs4Dash::bs4ValueBoxOutput(ns("ireCasesBox"), width = 12),
-                color="#1E90FF"
-              ),
-              shinycssloaders::withSpinner(
-                bs4Dash::bs4ValueBoxOutput(ns("ireDeathsBox"), width = 12),
-                color="#1E90FF"
-              )
-            ),
-            fluidRow(
-              shinycssloaders::withSpinner(
-                bs4Dash::bs4ValueBoxOutput(ns("ireHospBox"), width = 6),
-                color="#1E90FF"
-              ),
-              shinycssloaders::withSpinner(
-                bs4Dash::bs4ValueBoxOutput(ns("ireICUBox"), width = 6),
-                color="#1E90FF"
-              )
+            shinycssloaders::withSpinner(
+              bs4Dash::bs4ValueBoxOutput(ns("ireCasesBox"), width = 12),
+              color="#1E90FF"
             )
           ),
           col_6(
+            shinycssloaders::withSpinner(
+              bs4Dash::bs4ValueBoxOutput(ns("ireDeathsBox"), width = 12),
+              color="#1E90FF"
+            )
+          )
+        ),
+        fluidRow(
+          col_6(
+            shinycssloaders::withSpinner(
+              bs4Dash::bs4ValueBoxOutput(ns("ireHospBox"), width = 12),
+              color="#1E90FF"
+            )
+          ),
+          col_6(
+            shinycssloaders::withSpinner(
+              bs4Dash::bs4ValueBoxOutput(ns("ireICUBox"), width = 12),
+              color="#1E90FF"
+            )
           )
         )
+      ),
+      col_4(
+        leaflet::leafletOutput(ns("irelandCovidMap"))
       )
     ),
     fluidRow(
@@ -49,6 +58,7 @@ mod_summary_ui <- function(id) {
       )
     )
   )
+
 }
 
 #' summary Server Function
@@ -92,6 +102,10 @@ mod_summary_server <- function(input, output, session) {
       title = "Ireland: ICU",
       icon = "briefcase-medical"
     )
+  })
+
+  output$irelandCovidMap <- leaflet::renderLeaflet({
+      ireland_map(irish_county_data)
   })
 
 }

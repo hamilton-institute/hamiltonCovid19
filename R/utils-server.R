@@ -28,7 +28,7 @@ ireland_value_box <- function(tab, variable, title, icon) {
     subtitle = tags$p(HTML(text)),
     icon = icon,
     status = "success",
-    width = 6,
+    width = NULL,
     footer = create_update_message(tab_latest_data$Date)
   )
 }
