@@ -15,3 +15,4 @@
 
 * Recreated Ireland leaflet map in Summary tab
 * Changed sidebar width
+* Recreated global valueboxes in Summary tab
