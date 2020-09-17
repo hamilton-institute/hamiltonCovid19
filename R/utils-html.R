@@ -11,7 +11,7 @@ create_value_box_text <- function(title, change) {
 create_change_message <- function(value) {
   paste(
     html_arrow(value),
-    ifelse(value == 0, 'No change', abs(value)),
+    ifelse(value == 0, 'No change', format_number(value)),
     'since previous day'
   )
 }
@@ -19,15 +19,72 @@ create_change_message <- function(value) {
 #' Returns a up, down or right arrow depending on the value
 html_arrow <- function(value) {
   if (value == 0)  {
-    fontawesome::fa(name = "arrow-right", fill = "grey")
+    fa_icon(name = "arrow-right", fill = "#acabb0")
   } else if (value < 0) {
-    fontawesome::fa(name = "arrow-down", fill = "white")
+    fa_icon(name = "arrow-down", fill = "white")
   } else if (value > 0) {
-    fontawesome::fa(name = "arrow-up", fill = "black")
+    fa_icon(name = "arrow-up", fill = "black")
   }
+}
+
+format_number <- function(value) {
+  value %>%
+    abs() %>%
+    format(big.mark = ",")
 }
 
 #' Creates "last updated" message for the value boxes
 create_update_message <- function(date) {
   em("Updated: ", date, style = "font-size: 0.9vmax;")
+}
+
+fa_icon <- function(name, height = NULL, fill = NULL, top = "-0.1em") {
+
+  full_name <- NULL
+
+  if (name %in% fontawesome:::fa_tbl$full_name) {
+    svg <- fontawesome:::fa_tbl[which(
+      fontawesome:::fa_tbl$full_name == name
+    ), ][1, 4]
+  }
+  else if (name %in% fontawesome:::fa_tbl$name) {
+    svg <- fontawesome:::fa_tbl[which(
+      fontawesome:::fa_tbl$name == name
+    ), ][1, 4]
+  }
+  else {
+    return("")
+  }
+
+  style <- "style=\""
+
+  if (is.null(height)) {
+    style <- paste0(style, "height:0.8em;position:relative;")
+  }
+  else {
+    style <- paste0(style, "height:", height, ";")
+  }
+
+  if (is.null(top)) {
+    style <- paste0(style, "top: -0.1em;")
+  } else {
+    style <- paste0(style, "top:", top, ";")
+  }
+
+  if (!is.null(fill)) {
+    style <- paste0(style, "fill:", fill, ";")
+  }
+
+  style <- paste0(style, "\"")
+
+  if (!grepl(style, pattern = "style=\"\"")) {
+    svg <- gsub(pattern = "^<svg", replacement = paste0("<svg ",
+                                                        style), x = svg)
+  }
+
+  svg <- htmltools::HTML(svg)
+  class(svg) <- c("fontawesome", class(svg))
+
+  svg
+
 }

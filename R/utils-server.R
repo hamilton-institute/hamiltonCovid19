@@ -1,5 +1,5 @@
 #' Creates the Ireland value boxes in the Summary tab
-ireland_value_box <- function(tab, variable, title, icon) {
+value_box_counts <- function(tab, variable, title, icon, status = "success") {
 
   tab_latest_data <- tab %>%
     dplyr::filter(Date == max(Date))
@@ -27,8 +27,35 @@ ireland_value_box <- function(tab, variable, title, icon) {
     value = tags$p(val, style = "font-size: 2vmax; margin-bottom: 0;"),
     subtitle = tags$p(HTML(text)),
     icon = icon,
-    status = "success",
+    status = status,
     width = NULL,
     footer = create_update_message(tab_latest_data$Date)
+  )
+}
+
+value_box_countries <- function(tab, variable, title, icon) {
+
+  name <- stringr::str_replace_all(
+    tab$countriesAndTerritories[1], '_', ' '
+  )
+
+  value <- tab %>%
+    dplyr::slice(1) %>%
+    dplyr::pull({{variable}}) %>%
+    abs() %>%
+    format(big.mark = ',')
+
+  bs4Dash::bs4ValueBox(
+    value = tags$p(
+      name,
+      style = paste0(
+        "font-size: ",
+        ifelse(nchar(name) < 10, 3, 3 * 9 / nchar(name)),
+        "vmax;"
+      )
+    ),
+    subtitle = HTML(paste0(title, value)),
+    status = 'primary',
+    icon = icon
   )
 }

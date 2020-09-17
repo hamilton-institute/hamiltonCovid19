@@ -9,3 +9,9 @@
 #### 2020-09-14
 
 * Created `bs4dash` layout
+* Recreated valueboxes for Ireland data in Summary tab
+
+#### 2020-09-16
+
+* Recreated Ireland leaflet map in Summary tab
+* Changed sidebar width
