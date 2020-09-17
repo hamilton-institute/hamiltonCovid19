@@ -1,0 +1,14 @@
+.main-sidebar, .main-sidebar::before {
+    width: 180px;
+}
+
+@media (min-width: 576px) {
+  .content-wrapper, .main-footer, .main-header {
+      margin-left: 180px;
+  }
+}
+
+.brand-link {
+    font-size: 0.9em;
+    line-height: 2.0em;
+}

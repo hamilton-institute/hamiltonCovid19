@@ -13,5 +13,5 @@ app_server <- function(input, output, session) {
 
   tab_last_updated <- hamiltonCovid19::tab_last_updated
 
-  callModule(mod_summary_server, "summary_ui_1")
+  callModule(mod_summary_ireland_server, "summary_ireland_ui_1")
 }

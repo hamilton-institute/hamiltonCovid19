@@ -85,7 +85,7 @@ create_body <- function() {
     bs4Dash::bs4TabItems(
       bs4Dash::bs4TabItem(
         tabName = "summary",
-        mod_summary_ui("summary_ui_1")
+        mod_summary_ireland_ui("summary_ireland_ui_1")
       )
     )
   )
@@ -99,7 +99,7 @@ create_body <- function() {
 #' @import shiny
 #' @importFrom golem add_resource_path activate_js favicon bundle_resources
 #' @noRd
-golem_add_external_resources <- function(){
+golem_add_external_resources <- function() {
 
   add_resource_path(
     'www', app_sys('app/www')
@@ -111,8 +111,6 @@ golem_add_external_resources <- function(){
       path = app_sys('app/www'),
       app_title = 'hamiltonCovid19'
     )
-    # Add here other external resources
-    # for example, you can add shinyalert::useShinyalert()
   )
 }
 

@@ -7,7 +7,7 @@
 #' @noRd
 #'
 #' @importFrom shiny NS tagList
-mod_summary_ui <- function(id) {
+mod_summary_ireland_ui <- function(id) {
   ns <- NS(id)
   tagList(
     fluidRow(
@@ -64,7 +64,7 @@ mod_summary_ui <- function(id) {
 #' summary Server Function
 #'
 #' @noRd
-mod_summary_server <- function(input, output, session) {
+mod_summary_ireland_server <- function(input, output, session) {
 
   ns <- session$ns
 
