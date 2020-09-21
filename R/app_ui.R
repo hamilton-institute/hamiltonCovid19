@@ -87,6 +87,10 @@ create_body <- function() {
         tabName = "summary",
         mod_summary_ireland_ui("summary_ireland_ui_1"),
         mod_summary_global_ui("summary_global_ui_1")
+      ),
+      bs4Dash::bs4TabItem(
+        tabName = "map",
+        mod_map_ui("map_ui_1")
       )
     )
   )

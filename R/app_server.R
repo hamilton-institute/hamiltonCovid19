@@ -26,4 +26,10 @@ app_server <- function(input, output, session) {
     "summary_global_ui_1",
     global_data
   )
+
+  callModule(
+    mod_map_server,
+    "map_ui_1",
+    irish_county_data
+  )
 }
