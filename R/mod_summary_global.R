@@ -41,6 +41,35 @@ mod_summary_global_ui <- function(id){
           color="#1E90FF"
         )
       )
+    ),
+    fluidRow(
+      col_4(
+        bs4Dash::box(
+          width = 12,
+          title = htmlOutput(ns("dailyDeathsTitle")),
+          DT::dataTableOutput(ns("highestDaily"))
+        )
+      ),
+      col_4(
+        bs4Dash::box(
+          width = 12,
+          title = HTML(
+            fa_icon(name = "exclamation-triangle", fill = "#d81b60"),
+            "Total deaths"
+          ),
+          DT::dataTableOutput(ns("highestTotal"))
+        )
+      ),
+      col_4(
+        bs4Dash::box(
+          width = 12,
+          title = HTML(
+            fa_icon(name = "chart-line", fill = "#3c8dbc"),
+            "Deaths increase from yesterday"
+          ),
+          DT::dataTableOutput(ns("biggestChange"))
+        )
+      )
     )
   )
 }
@@ -49,7 +78,14 @@ mod_summary_global_ui <- function(id){
 #'
 #' @noRd
 mod_summary_global_server <- function(input, output, session, global_data) {
+
+
   ns <- session$ns
+
+  latest_global_data <- reactive({
+    global_data %>%
+      dplyr::filter(Date == max(Date))
+  })
 
   output$wCasesBox <- bs4Dash::renderbs4ValueBox({
     global_data %>%
@@ -75,8 +111,8 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   output$bigDailyBox <- bs4Dash::renderbs4ValueBox({
 
-    daily_death <- global_data %>%
-      dplyr::filter(countriesAndTerritories != 'Global', Date == max(Date)) %>%
+    daily_death <- latest_global_data() %>%
+      dplyr::filter(countriesAndTerritories != 'Global') %>%
       dplyr::slice_max(deaths, 1)
 
     value_box_countries(
@@ -105,11 +141,10 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   output$increaseDeathBox <- bs4Dash::renderbs4ValueBox({
 
-    biggest_increase <- global_data %>%
+    biggest_increase <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        deaths != 0,
-        Date == max(Date)
+        deaths != 0
       ) %>%
       dplyr::slice_max(changeDeaths, 1)
 
@@ -124,11 +159,10 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   output$bigDecreaseBox <- bs4Dash::renderbs4ValueBox({
 
-    biggest_decrease <- global_data %>%
+    biggest_decrease <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        deaths != 0,
-        Date == max(Date)
+        deaths != 0
       ) %>%
       dplyr::slice_min(changeDeaths, 1)
 
@@ -136,11 +170,53 @@ mod_summary_global_server <- function(input, output, session, global_data) {
       tab = biggest_decrease,
       variable = changeDeaths,
       title = "Biggest reduction in deaths since</br> previous day: ",
-      icon = "arrow-up"
+      icon = "arrow-down"
     )
 
   })
 
+  output$dailyDeathsTitle <- renderUI({
+    HTML(
+      fa_icon(name = "calendar-day", fill = "#3d9970"),
+      paste0("Daily deaths: ", format(max(global_data$Date), '%d-%b-%Y'))
+    )
+  })
+
+  output$highestDaily <- DT::renderDataTable({
+    latest_global_data() %>%
+      dplyr::filter(countriesAndTerritories != "Global") %>%
+      dplyr::arrange(desc(deaths)) %>%
+      dplyr::select(
+        Country = countriesAndTerritories,
+        `Daily deaths` = deaths,
+      ) %>%
+      summaryTab_table()
+  })
+
+  output$highestTotal <- DT::renderDataTable({
+    latest_global_data() %>%
+      dplyr::filter(countriesAndTerritories != "Global") %>%
+      dplyr::arrange(desc(totalDeaths)) %>%
+      dplyr::select(
+        Country = countriesAndTerritories,
+        `Total deaths` = totalDeaths
+      ) %>%
+      summaryTab_table()
+  })
+
+  output$biggestChange <- DT::renderDataTable({
+    latest_global_data() %>%
+      dplyr::filter(
+        countriesAndTerritories != 'Global',
+        deaths != 0
+      ) %>%
+      dplyr::select(
+        Country = countriesAndTerritories,
+        `Change in deaths` = changeDeaths
+      ) %>%
+      dplyr::arrange(desc(`Change in deaths`)) %>%
+      summaryTab_table()
+  })
 
 }
 

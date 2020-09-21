@@ -16,3 +16,7 @@
 * Recreated Ireland leaflet map in Summary tab
 * Changed sidebar width
 * Recreated global valueboxes in Summary tab
+
+#### 2020-09-21
+
+* Recreated ranking tables in Summary tab
