@@ -20,3 +20,4 @@
 #### 2020-09-21
 
 * Recreated ranking tables in Summary tab
+* Recreated (county) Map tab

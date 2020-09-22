@@ -106,7 +106,9 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
   })
 
   output$irelandCovidMap <- leaflet::renderLeaflet({
-      ireland_map(irish_county_data)
+    irish_county_data %>%
+      dplyr::filter(Date == max(Date)) %>%
+      ireland_map()
   })
 
 }

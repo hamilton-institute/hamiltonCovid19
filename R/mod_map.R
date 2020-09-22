@@ -38,14 +38,19 @@ mod_map_server <- function(input, output, session, irish_county_data){
 
   ns <- session$ns
 
+  latest_irish_county_data <- reactive({
+    irish_county_data %>%
+      dplyr::filter(Date == max(Date))
+  })
+
   output$countyCasesTable <- DT::renderDataTable({
 
     latest_date <- max(irish_county_data$Date)
 
-    irish_county_data %>%
-      dplyr::filter(Date == latest_date) %>%
+    latest_irish_county_data() %>%
       dplyr::arrange(dplyr::desc(ConfirmedCovidCases)) %>%
       dplyr::select(CountyName, `Number of Cases` = ConfirmedCovidCases) %>%
+      sf::st_drop_geometry() %>%
       DT::datatable(
         caption = paste0("Updated: ", latest_date),
         options = list(
@@ -60,7 +65,7 @@ mod_map_server <- function(input, output, session, irish_county_data){
   })
 
   output$covidMap <- leaflet::renderLeaflet({
-    irish_county_data %>%
+    latest_irish_county_data() %>%
       ireland_map() %>%
       leaflet::addMarkers(
         lat = ~LATITUDE,
@@ -69,11 +74,11 @@ mod_map_server <- function(input, output, session, irish_county_data){
         popup = leafpop::popupGraph(make_leaflet_popup_plots(irish_county_data))
       ) %>%
       leaflet::addLegend(
-        pal = leaflet_map_pal(tab),
+        pal = leaflet_map_pal(latest_irish_county_data()),
         title = 'Cases',
         values = ~log2(ConfirmedCovidCases),
         opacity = 1.0,
-        labFormat = labelFormat(transform = function(x) round(2^x))
+        labFormat = leaflet::labelFormat(transform = function(x) round(2^x))
       )
   })
 

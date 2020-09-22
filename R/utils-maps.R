@@ -34,18 +34,22 @@ trend_icon <- function(url = NULL, width = 15, height = 15) {
 }
 
 make_leaflet_popup_plots <- function(tab) {
-  purrr::map(tab$NAME_TAG, leaflet_popup_plot, tab = tab)
+  purrr::map(unique(tab$CountyName), leaflet_popup_plot, tab = tab)
 }
 
 leaflet_popup_plot <- function(tab, county) {
 
+  tab <- tab %>%
+    dplyr::filter(CountyName == county)
+
   latest_date <- max(tab$Date)
+
   number_cases <- tab %>%
     dplyr::filter(Date == latest_date) %>%
-    dplyr::pull(`Number of Cases`)
+    dplyr::pull(ConfirmedCovidCases)
 
   tab %>%
-    filter(CountyName == county) %>%
+    dplyr::rename(`Number of Cases` = ConfirmedCovidCases) %>%
     ggplot2::ggplot(ggplot2::aes(
       x = as.Date(Date),
       y = `Number of Cases`,
@@ -64,7 +68,7 @@ leaflet_popup_plot <- function(tab, county) {
       y = "Number of individuals"
     ) +
     ggplot2::theme_bw() +
-    ggplot2::theme(axis.text.x = element_text(angle = 90))
+    ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 }
 
 
