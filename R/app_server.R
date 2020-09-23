@@ -32,4 +32,11 @@ app_server <- function(input, output, session) {
     "map_ui_1",
     irish_county_data
   )
+
+  callModule(
+    mod_graphs_server,
+    "graphs_ui_1",
+    global_data
+  )
+
 }

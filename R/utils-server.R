@@ -59,3 +59,35 @@ value_box_countries <- function(tab, variable, title, icon) {
     icon = icon
   )
 }
+
+function(x) {
+  switch(
+    input$sel_var[x],
+    'Cumulative cases' = 'cum_cases',
+    'Cumulative deaths' = 'cum_deaths',
+    'Daily cases' = 'cases',
+    'Daily deaths' = 'deaths',
+    'Logp1 cumulative cases' = 'cum_cases',
+    'Logp1 cumulative deaths' = 'cum_deaths',
+    'Logp1 daily cases' = 'cases',
+    'Logp1 daily deaths' = 'deaths',
+    'Cases per million population' = 'cases_per_million',
+    'Deaths per million population' = 'deaths_per_million'
+  )
+}
+
+theme_shiny_dashboard <- function (base_size = 12, base_family = "") {
+  ggplot2::theme_dark(base_size = base_size, base_family = base_family) +
+    ggplot2::theme(
+      axis.text = ggplot2::element_text(colour = rgb(205/255,205/255,205/255)), # 205 205 205
+      axis.title = ggplot2::element_text(colour = rgb(205/255,205/255,205/255)),
+      axis.title.x = ggplot2::element_text(colour = rgb(205/255,205/255,205/255)),
+      axis.title.y = ggplot2::element_text(colour = rgb(205/255,205/255,205/255)),
+      plot.title = ggplot2::element_text(colour = rgb(205/255,205/255,205/255)),
+      legend.title = ggplot2::element_text(colour = rgb(205/255,205/255,205/255)),
+      legend.text = ggplot2::element_text(colour = rgb(205/255,205/255,205/255)),
+      legend.background = ggplot2::element_rect(fill=rgb(70/255,80/255,90/255)),
+      panel.background = ggplot2::element_rect(fill=rgb(70/255,80/255,90/255)), # 70 80 89
+      plot.background = ggplot2::element_rect(fill=rgb(52/255,62/255,72/255)) # 52 62 72
+    )
+}

@@ -57,22 +57,22 @@ create_sidebar <- function() {
       ),
       bs4Dash::bs4SidebarMenuItem(
         "Graphs",
-        tabName = "map",
+        tabName = "graphs",
         icon = "bar-chart-o"
       ),
       bs4Dash::bs4SidebarMenuItem(
         "Animations",
-        tabName = "map",
+        tabName = "animations",
         icon = "chart-line"
       ),
       bs4Dash::bs4SidebarMenuItem(
         "Interventions",
-        tabName = "map",
+        tabName = "intervations",
         icon = "user-plus"
       ),
       bs4Dash::bs4SidebarMenuItem(
         "Sources",
-        tabName = "map",
+        tabName = "sources",
         icon = "list-alt"
       )
     )
@@ -91,6 +91,10 @@ create_body <- function() {
       bs4Dash::bs4TabItem(
         tabName = "map",
         mod_map_ui("map_ui_1")
+      ),
+      bs4Dash::bs4TabItem(
+        tabName = "graphs",
+        mod_graphs_ui("graphs_ui_1")
       )
     )
   )
