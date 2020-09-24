@@ -39,4 +39,10 @@ app_server <- function(input, output, session) {
     global_data
   )
 
+  callModule(
+    mod_animations_server,
+    "animations_ui_1",
+    global_data
+  )
+
 }

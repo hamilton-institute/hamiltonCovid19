@@ -19,18 +19,7 @@ mod_graphs_ui <- function(id){
         shinyWidgets::pickerInput(
           inputId = ns("sel_var"),
           label = "Select variables",
-          choices = c(
-            'Cumulative cases' = 'cum_cases',
-            'Cumulative deaths' = 'cum_deaths',
-            'Daily cases' = 'cases',
-            'Daily deaths' = 'deaths',
-            'Logp1 cumulative cases' = 'cum_cases',
-            'Logp1 cumulative deaths' = 'cum_deaths',
-            'Logp1 daily cases' = 'cases',
-            'Logp1 daily deaths' = 'deaths',
-            'Cases per million population' = 'cases_per_million',
-            'Deaths per million population' = 'deaths_per_million'
-          ),
+          choices = get_graph_variables(),
           selected = c('deaths_per_million'),
           multiple = TRUE
         )
@@ -73,22 +62,10 @@ mod_graphs_server <- function(input, output, session, global_data) {
   ns <- session$ns
 
   output$ui_sel_ctry <- renderUI({
-    shinyWidgets::pickerInput(
-      ns("sel_ctry"),
-      "Select countries",
-      choices = unique(global_data$countriesAndTerritories),
-      selected = c(
-        'France',
-        'Ireland',
-        'UK',
-        'USA',
-        'Spain',
-        'Belgium',
-        'Italy'
-      ),
-      options = list(`actions-box` = TRUE, `live-search` = TRUE),
-      multiple = TRUE
-    )
+    global_data %>%
+      dplyr::pull(countriesAndTerritories) %>%
+      unique() %>%
+      country_picker(id = ns("sel_ctry"))
   })
 
   output$CountryPlot <- plotly::renderPlotly({
@@ -116,7 +93,14 @@ mod_graphs_server <- function(input, output, session, global_data) {
         cases_per_million = 1e6 * cumsum(cases) / popData2019,
         deaths_per_million = 1e6 * cumsum(deaths) / popData2019
       ) %>%
-      dplyr::ungroup()
+      dplyr::ungroup() %>%
+      dplyr::mutate(
+        dplyr::across(
+          c("cases", "deaths", "cum_cases", "cum_deaths"),
+          ~ .x + 1,
+          .names = "log_{col}"
+        )
+      )
 
     create_color_pal <- colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))
 
@@ -142,16 +126,6 @@ mod_graphs_server <- function(input, output, session, global_data) {
       global_agg = global_agg %>% dplyr::filter(cum_deaths >= 10)
     } else if (input$sel_axis == 'Days since 10th case') {
       global_agg = global_agg %>% dplyr::filter(cum_cases >= 10)
-    }
-
-    if (any(stringr::str_detect(input$sel_var, 'Logp1'))) {
-      change <- which(stringr::str_detect(input$sel_var, 'Logp1'))
-      for (i in 1:length(change)) {
-        global_agg <-  global_agg %>%
-          dplyr::mutate(
-            !!input$sel_var[change[i]] := get(input$sel_var[change[i]]) + 1
-          )
-      }
     }
 
     global_agg <- global_agg %>%

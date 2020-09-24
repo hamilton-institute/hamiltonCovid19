@@ -121,3 +121,64 @@ customBs4DashSidebar <- function (..., inputId = NULL, disable = FALSE,
     sidebarTag
 
 }
+
+get_graph_variables <- function() {
+  c(
+    'Cumulative cases' = 'cum_cases',
+    'Cumulative deaths' = 'cum_deaths',
+    'Daily cases' = 'cases',
+    'Daily deaths' = 'deaths',
+    'Logp1 cumulative cases' = 'log_cum_cases',
+    'Logp1 cumulative deaths' = 'log_cum_deaths',
+    'Logp1 daily cases' = 'log_cases',
+    'Logp1 daily deaths' = 'log_deaths',
+    'Cases per million population' = 'cases_per_million',
+    'Deaths per million population' = 'deaths_per_million'
+  )
+}
+
+get_anim_variables <- function() {
+  c(
+    'Cumulative cases' = 'cum_cases',
+    'Cumulative deaths' = 'cum_deaths',
+    'Daily cases' = 'daily_cases',
+    'Daily deaths' = 'daily_deaths',
+    'Logp1 daily cases' = 'log_daily_cases',
+    'Logp1 daily deaths' = 'log_daily_deaths',
+    'Sqrt daily cases' = 'sqrt_daily_cases',
+    'Sqrt daily deaths' = 'sqrt_daily_deaths',
+    'Sqrt cumulative cases' = 'sqrt_cum_cases',
+    'Sqrt cumulative deaths' = 'sqrt_cum_deaths',
+    'Logp1 cumulative cases' = 'log_cum_cases',
+    'Logp1 cumulative deaths' = 'logcum_deaths',
+    'Cumulative cases per million population' = 'cases_per_million',
+    'Cumulative deaths per million population' = 'deaths_per_million'
+  )
+}
+
+get_anim_variable_name <- function(x) {
+  names(get_anim_variables()[get_anim_variables() == x]) %>%
+    stringr::str_remove("Sqrt") %>%
+    stringr::str_remove("Logp1") %>%
+    stringr::str_to_sentence()
+}
+
+
+country_picker <- function(choices, id) {
+  shinyWidgets::pickerInput(
+    inputId = id,
+    label = "Select countries",
+    choices = choices,
+    selected = c(
+      'France',
+      'Ireland',
+      'UK',
+      'USA',
+      'Spain',
+      'Belgium',
+      'Italy'
+    ),
+    options = list(`actions-box` = TRUE, `live-search` = TRUE),
+    multiple = TRUE
+  )
+}

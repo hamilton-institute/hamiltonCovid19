@@ -25,3 +25,7 @@
 #### 2020-09-23
 
 * Recreated Graphs tab
+
+#### 2020-09-24
+
+* Recreated Animations tab

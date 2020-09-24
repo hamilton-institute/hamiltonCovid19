@@ -95,6 +95,10 @@ create_body <- function() {
       bs4Dash::bs4TabItem(
         tabName = "graphs",
         mod_graphs_ui("graphs_ui_1")
+      ),
+      bs4Dash::bs4TabItem(
+        tabName = "animations",
+        mod_animations_ui("animations_ui_1")
       )
     )
   )
