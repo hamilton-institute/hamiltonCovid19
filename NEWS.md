@@ -33,3 +33,4 @@
 #### 2020-09-28
 * Recreated Interventions tab
 * Recreated Sources tab
+* Recreated dark theme

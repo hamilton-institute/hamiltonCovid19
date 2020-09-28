@@ -12,7 +12,7 @@ mod_map_ui <- function(id){
   tagList(
     fluidRow(
       col_3(
-        bs4Dash::box(
+        custom_box(
           title = 'Cases by County',
           width = 12,
           DT::dataTableOutput(ns("countyCasesTable")) %>%
@@ -20,7 +20,7 @@ mod_map_ui <- function(id){
         )
       ),
       col_9(
-        bs4Dash::box(
+        custom_box(
           title = "COVID-19 in Ireland",
           width = 12,
           leaflet::leafletOutput(ns('covidMap')) %>%

@@ -88,3 +88,24 @@ fa_icon <- function(name, height = NULL, fill = NULL, top = "-0.1em") {
   svg
 
 }
+
+sources_item <- function(link, icon, title) {
+  tagList(
+    a(
+      href = link, target = "_blank",
+      h5(fa_icon(name = icon, fill = "#FFFFFF", height = "20px"), title)
+    )
+  )
+}
+
+custom_box <- function(title, width, ...) {
+  bs4Dash::box(
+    title = title,
+    width = width,
+    status = "secondary",
+    gradientColor = "secondary",
+    closable = FALSE,
+    collapsible = FALSE,
+    ... = ...
+  )
+}

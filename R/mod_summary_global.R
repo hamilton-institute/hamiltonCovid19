@@ -44,14 +44,14 @@ mod_summary_global_ui <- function(id){
     ),
     fluidRow(
       col_4(
-        bs4Dash::box(
+        custom_box(
           width = 12,
           title = htmlOutput(ns("dailyDeathsTitle")),
           DT::dataTableOutput(ns("highestDaily"))
         )
       ),
       col_4(
-        bs4Dash::box(
+        custom_box(
           width = 12,
           title = HTML(
             fa_icon(name = "exclamation-triangle", fill = "#d81b60"),
@@ -61,7 +61,7 @@ mod_summary_global_ui <- function(id){
         )
       ),
       col_4(
-        bs4Dash::box(
+        custom_box(
           width = 12,
           title = HTML(
             fa_icon(name = "chart-line", fill = "#3c8dbc"),
