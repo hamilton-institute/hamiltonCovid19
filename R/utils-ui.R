@@ -122,6 +122,19 @@ customBs4DashSidebar <- function (..., inputId = NULL, disable = FALSE,
 
 }
 
+get_inter_variables <- function() {
+  c(
+    'Cumulative cases' = 'totalCases',
+    'Cumulative deaths' = 'totalDeaths',
+    'Daily cases' = 'cases',
+    'Daily deaths' = 'deaths',
+    'Log cumulative cases' = 'logTotalCases',
+    'Log cumulative deaths' = 'logTotalDeaths',
+    'Cases per million population' = 'casesPerMillion',
+    'Deaths per million population' = 'deathsPerMillion'
+  )
+}
+
 get_graph_variables <- function() {
   c(
     'Cumulative cases' = 'cum_cases',
@@ -156,8 +169,8 @@ get_anim_variables <- function() {
   )
 }
 
-get_anim_variable_name <- function(x) {
-  names(get_anim_variables()[get_anim_variables() == x]) %>%
+get_variable_name <- function(x, vars) {
+  names(vars[vars == x]) %>%
     stringr::str_remove("Sqrt") %>%
     stringr::str_remove("Logp1") %>%
     stringr::str_to_sentence()

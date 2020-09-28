@@ -14,6 +14,8 @@ app_server <- function(input, output, session) {
   global_data <- hamiltonCovid19::global_data
   # tab_last_updated <- hamiltonCovid19::tab_last_updated
 
+  interventions_data <- hamiltonCovid19::interventions_data
+
   callModule(
     mod_summary_ireland_server,
     "summary_ireland_ui_1",
@@ -43,6 +45,13 @@ app_server <- function(input, output, session) {
     mod_animations_server,
     "animations_ui_1",
     global_data
+  )
+
+  callModule(
+    mod_interventions_server,
+    "interventions_ui_1",
+    global_data,
+    interventions_data
   )
 
 }

@@ -67,7 +67,7 @@ create_sidebar <- function() {
       ),
       bs4Dash::bs4SidebarMenuItem(
         "Interventions",
-        tabName = "intervations",
+        tabName = "interventions",
         icon = "user-plus"
       ),
       bs4Dash::bs4SidebarMenuItem(
@@ -99,6 +99,10 @@ create_body <- function() {
       bs4Dash::bs4TabItem(
         tabName = "animations",
         mod_animations_ui("animations_ui_1")
+      ),
+      bs4Dash::bs4TabItem(
+        tabName = "interventions",
+        mod_interventions_ui("interventions_ui_1")
       )
     )
   )

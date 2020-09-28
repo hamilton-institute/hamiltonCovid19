@@ -37,7 +37,11 @@ global_data <- global_data %>%
     changeCases = cases - lag(cases),
     changeDeaths = deaths - lag(deaths),
     totalCases = cumsum(cases),
-    totalDeaths = cumsum(deaths)
+    totalDeaths = cumsum(deaths),
+    logTotalCases = log(totalCases),
+    logTotalDeaths = log(totalDeaths),
+    casesPerMillion = 1e6 * totalCases / popData2019,
+    deathsPerMillion = 1e6 * totalDeaths / popData2019
   ) %>%
   ungroup()
 

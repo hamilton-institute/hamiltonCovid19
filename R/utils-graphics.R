@@ -89,8 +89,8 @@ ani_graph <- function(tab, ctry, x_pick, y_pick, date) {
     ggplot2::geom_line(data = dplyr::filter(global_agg, Date <= date), alpha = 0.4) +
     ggplot2::geom_label(ggplot2::aes(label = countriesAndTerritories)) +
     ggplot2::labs(
-      x = get_anim_variable_name(x_pick),
-      y = get_anim_variable_name(y_pick)
+      x = get_variable_name(x_pick, get_anim_variables()),
+      y = get_variable_name(y_pick, get_anim_variables())
     ) +
     ggplot2::scale_size(range = c(2, 12)) +
     { if (stringr::str_detect(x_pick, 'sqrt')) {
@@ -138,5 +138,10 @@ ani_graph <- function(tab, ctry, x_pick, y_pick, date) {
       legend.position = 'None',
       axis.title.y = ggplot2::element_text(angle = 0, vjust = 1, hjust=0)
     )
+
+}
+
+
+interv_graph <- function() {
 
 }
