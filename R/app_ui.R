@@ -103,6 +103,10 @@ create_body <- function() {
       bs4Dash::bs4TabItem(
         tabName = "interventions",
         mod_interventions_ui("interventions_ui_1")
+      ),
+      bs4Dash::bs4TabItem(
+        tabName = "sources",
+        mod_sources_ui("sources_ui_1")
       )
     )
   )
