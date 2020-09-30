@@ -34,3 +34,7 @@
 * Recreated Interventions tab
 * Recreated Sources tab
 * Recreated dark theme
+
+#### 2020-09-30
+* Replaced DT with reactable
+* Created reactable theme
