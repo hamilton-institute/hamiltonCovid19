@@ -195,3 +195,15 @@ country_picker <- function(choices, id) {
     multiple = TRUE
   )
 }
+
+custom_box <- function(title, width, ...) {
+  bs4Dash::box(
+    title = title,
+    width = width,
+    status = "secondary",
+    gradientColor = "secondary",
+    closable = FALSE,
+    collapsible = FALSE,
+    ... = ...
+  )
+}

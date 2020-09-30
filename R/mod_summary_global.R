@@ -47,7 +47,7 @@ mod_summary_global_ui <- function(id){
         custom_box(
           width = 12,
           title = htmlOutput(ns("dailyDeathsTitle")),
-          DT::dataTableOutput(ns("highestDaily"))
+          reactable::reactableOutput(ns("highestDaily"))
         )
       ),
       col_4(
@@ -57,7 +57,7 @@ mod_summary_global_ui <- function(id){
             fa_icon(name = "exclamation-triangle", fill = "#d81b60"),
             "Total deaths"
           ),
-          DT::dataTableOutput(ns("highestTotal"))
+          reactable::reactableOutput(ns("highestTotal"))
         )
       ),
       col_4(
@@ -67,7 +67,7 @@ mod_summary_global_ui <- function(id){
             fa_icon(name = "chart-line", fill = "#3c8dbc"),
             "Deaths increase from yesterday"
           ),
-          DT::dataTableOutput(ns("biggestChange"))
+          reactable::reactableOutput(ns("biggestChange"))
         )
       )
     )
@@ -113,7 +113,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
     daily_death <- latest_global_data() %>%
       dplyr::filter(countriesAndTerritories != 'Global') %>%
-      dplyr::slice_max(deaths, 1)
+      dplyr::slice_max(deaths, n = 1)
 
     value_box_countries(
       tab = daily_death,
@@ -128,7 +128,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
     worst_countries <- global_data %>%
       dplyr::filter(countriesAndTerritories != 'Global') %>%
-      dplyr::slice_max(totalDeaths, 1)
+      dplyr::slice_max(totalDeaths, n = 1)
 
     value_box_countries(
       tab = worst_countries,
@@ -146,7 +146,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
         countriesAndTerritories != 'Global',
         deaths != 0
       ) %>%
-      dplyr::slice_max(changeDeaths, 1)
+      dplyr::slice_max(changeDeaths, n = 1)
 
     value_box_countries(
       tab = biggest_increase,
@@ -164,7 +164,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
         countriesAndTerritories != 'Global',
         deaths != 0
       ) %>%
-      dplyr::slice_min(changeDeaths, 1)
+      dplyr::slice_min(changeDeaths, n = 1)
 
     value_box_countries(
       tab = biggest_decrease,
@@ -182,7 +182,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
     )
   })
 
-  output$highestDaily <- DT::renderDataTable({
+  output$highestDaily <- reactable::renderReactable({
     latest_global_data() %>%
       dplyr::filter(countriesAndTerritories != "Global") %>%
       dplyr::arrange(desc(deaths)) %>%
@@ -193,7 +193,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
       summaryTab_table()
   })
 
-  output$highestTotal <- DT::renderDataTable({
+  output$highestTotal <- reactable::renderReactable({
     latest_global_data() %>%
       dplyr::filter(countriesAndTerritories != "Global") %>%
       dplyr::arrange(desc(totalDeaths)) %>%
@@ -204,7 +204,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
       summaryTab_table()
   })
 
-  output$biggestChange <- DT::renderDataTable({
+  output$biggestChange <- reactable::renderReactable({
     latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',

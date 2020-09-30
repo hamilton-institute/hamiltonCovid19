@@ -15,7 +15,12 @@ mod_map_ui <- function(id){
         custom_box(
           title = 'Cases by County',
           width = 12,
-          DT::dataTableOutput(ns("countyCasesTable")) %>%
+          height = 530,
+          textOutput(ns("updatedText")),
+          reactable::reactableOutput(
+            ns("countyCasesTable"),
+            height = "480px"
+          ) %>%
             shinycssloaders::withSpinner(color = "#1E90FF")
         )
       ),
@@ -23,7 +28,8 @@ mod_map_ui <- function(id){
         custom_box(
           title = "COVID-19 in Ireland",
           width = 12,
-          leaflet::leafletOutput(ns('covidMap')) %>%
+          height = 530,
+          leaflet::leafletOutput(ns('covidMap'), height = 500) %>%
             shinycssloaders::withSpinner(color="#1E90FF")
         )
       )
@@ -43,25 +49,23 @@ mod_map_server <- function(input, output, session, irish_county_data){
       dplyr::filter(Date == max(Date))
   })
 
-  output$countyCasesTable <- DT::renderDataTable({
-
+  output$updatedText <- renderText({
     latest_date <- max(irish_county_data$Date)
+    paste0("Updated: ", latest_date)
+  })
 
+  output$countyCasesTable <- reactable::renderReactable({
     latest_irish_county_data() %>%
       dplyr::arrange(dplyr::desc(ConfirmedCovidCases)) %>%
       dplyr::select(CountyName, `Number of Cases` = ConfirmedCovidCases) %>%
       sf::st_drop_geometry() %>%
-      DT::datatable(
-        caption = paste0("Updated: ", latest_date),
-        options = list(
-          pageLength = 20,
-          scrollY = 'calc((100vh - 290px)/1.0)',
-          searching = FALSE,
-          paging = FALSE
-        ),
+      reactable::reactable(
+        defaultPageSize = 20,
+        height = 480,
+        searchable = FALSE,
+        pagination = FALSE,
         rownames = FALSE
-      ) %>%
-      DT::formatStyle(1, color = "#c8c8c8", target = "row")
+      )
   })
 
   output$covidMap <- leaflet::renderLeaflet({

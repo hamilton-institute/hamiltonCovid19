@@ -16,6 +16,10 @@ app_server <- function(input, output, session) {
 
   interventions_data <- hamiltonCovid19::interventions_data
 
+  # Options
+
+  options(reactable.theme = theme_reactable())
+
   callModule(
     mod_summary_ireland_server,
     "summary_ireland_ui_1",

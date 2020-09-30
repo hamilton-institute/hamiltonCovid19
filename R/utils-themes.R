@@ -49,3 +49,16 @@ theme_bs4Dash <- function() {
   )
 }
 
+theme_reactable <- function() {
+  reactable::reactableTheme(
+    color = "#FFF",
+    backgroundColor = "transparent",
+    borderColor = "#343e48",
+    stripedColor = "#FFF",
+    highlightColor = "#46505a",
+    inputStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+    selectStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+    pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+    pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")
+  )
+}
