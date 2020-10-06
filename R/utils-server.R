@@ -51,11 +51,12 @@ value_box_countries <- function(tab, variable, title, icon) {
       style = paste0(
         "font-size: ",
         ifelse(nchar(name) < 10, 3, 3 * 9 / nchar(name)),
-        "vmax;"
+        "vmax; ",
+        "color: black;"
       )
     ),
-    subtitle = HTML(paste0(title, value)),
-    status = 'primary',
+    subtitle = p(HTML(paste0(title, value)), style = "color: black;"),
+    status = 'secondary',
     icon = icon
   )
 }

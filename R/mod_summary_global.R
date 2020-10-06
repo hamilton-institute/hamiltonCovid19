@@ -94,7 +94,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
         variable = totalCases,
         title = "Global: Diagnoses",
         icon = "globe",
-        status = "danger"
+        status = "success"
       )
   })
 
@@ -105,7 +105,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
         variable = totalDeaths,
         title = "Global: Deaths",
         icon = "cross",
-        status = "danger"
+        status = "success"
       )
   })
 
