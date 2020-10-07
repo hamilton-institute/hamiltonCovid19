@@ -20,8 +20,8 @@ app_ui <- function(request) {
 #' Creates app's navbar
 create_navbar <- function() {
   bs4Dash::bs4DashNavbar(
-    skin = "dark",
-    status = "dark",
+    skin = "light",
+    status = "light",
     border = TRUE,
     sidebarIcon = "bars",
     compact = FALSE,
@@ -32,8 +32,8 @@ create_navbar <- function() {
 #' Creates app's sidebar
 create_sidebar <- function() {
   customBs4DashSidebar(
-    skin = "dark",
-    status = "danger",
+    skin = "light",
+    status = "primary",
     title = "Hamilton Institute",
     brandColor = "dark",
     url = "https://www.maynoothuniversity.ie/hamilton",
