@@ -48,7 +48,7 @@ mod_summary_ireland_ui <- function(id) {
         )
       ),
       col_4(
-        leaflet::leafletOutput(ns("irelandCovidMap"))
+        leaflet::leafletOutput(ns("irelandCovidMap"), height = 350)
       )
     ),
     fluidRow(
@@ -108,7 +108,7 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
   output$irelandCovidMap <- leaflet::renderLeaflet({
     irish_county_data %>%
       dplyr::filter(Date == max(Date)) %>%
-      ireland_map()
+      ireland_map(title = "14-day cases per 100,000 residents")
   })
 
 }

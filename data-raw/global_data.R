@@ -14,7 +14,8 @@ global_data_raw <- global_data_raw %>%
       countriesAndTerritories == 'United_States_of_America' ~'USA',
       countriesAndTerritories == 'United_Kingdom' ~ 'UK',
       TRUE ~ countriesAndTerritories
-    )
+    ),
+    countriesAndTerritories = stringr::str_replace_all(countriesAndTerritories, "_", " ")
   )
 
 global_data_totals <- global_data_raw %>%

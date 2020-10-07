@@ -174,8 +174,8 @@ mod_graphs_server <- function(input, output, session, global_data) {
     ) +
       ggplot2::geom_line(ggplot2::aes(linetype = Type)) +
       ggplot2::labs(
-        x = input$sel_axis,
-        y = paste(input$sel_var, collapse = ',')
+        x = "", #input$sel_axis,
+        y = "" # paste(input$sel_var, collapse = ',')
       ) +
       ggplot2::scale_color_manual(values = country_colours) +
       { if(x_pick == 'Date') {
