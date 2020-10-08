@@ -41,3 +41,4 @@
 
 #### 2020-10-08
 * Created distill theme
+* Added variable selector for ranking table in summary tab
