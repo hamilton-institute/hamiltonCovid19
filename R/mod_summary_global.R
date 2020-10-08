@@ -44,31 +44,50 @@ mod_summary_global_ui <- function(id){
     ),
     fluidRow(
       column(
-        width = 12,
+        width = 4,
+        offset = 8,
         shinyWidgets::pickerInput(
           inputId = ns("sel_data"),
           label = "Select data",
           choices = c(
-            'Daily deaths' = "deaths",
-            'Daily cases' = "cases",
-            "Total deaths" = "totalDeaths",
-            "Total cases" = "totalCases",
             "Deaths increased since yesterday" =  "changeDeaths",
+            'Daily cases' = "cases",
+            "Total cases" = "totalCases",
             "Cases increased since yesterday" = "changeCases",
             "14-days per 100k residents" = "Cumulative_number_for_14_days_of_COVID.19_cases_per_100000"
           ),
-          selected = 'Daily deaths',
+          selected = '14-days per 100k residents',
           multiple = FALSE
         )
       )
     ),
+
     fluidRow(
-      column(
-        width = 12,
+      col_4(
         custom_box(
           width = 12,
-          title = htmlOutput(ns("tableTitle")),
+          title = htmlOutput(ns("dailyDeathsTitle")),
           reactable::reactableOutput(ns("highestDaily"))
+        )
+      ),
+      col_4(
+        custom_box(
+          width = 12,
+          HTML(
+            fa_icon(name = "exclamation-triangle", fill = "#d81b60"),
+            "Total deaths"
+          ),
+          reactable::reactableOutput(ns("highestTotal"))
+        )
+      ),
+      col_4(
+        custom_box(
+          width = 12,
+          title = htmlOutput(ns("tableTitle")), #HTML(
+          #   fa_icon(name = "chart-line", fill = "#3c8dbc"),
+          #   "Deaths increase from yesterday"
+          # ),
+          reactable::reactableOutput(ns("biggestChange"))
         )
       )
     )
@@ -179,9 +198,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
   data_name <- reactive({
     switch(
       input$sel_data,
-      "deaths" = 'Daily deaths',
       "cases" = 'Daily cases',
-      "totalDeaths" = "Total deaths",
       "totalCases" = "Total cases",
       "changeDeaths" =  "Deaths increased since yesterday",
       "changeCases" = "Cases increased since yesterday" ,
@@ -195,11 +212,44 @@ mod_summary_global_server <- function(input, output, session, global_data) {
            paste0(data_name(),": ", format(max(global_data$Date), '%d-%b-%Y')))
   })
 
+  output$dailyDeathsTitle <- renderUI({
+    HTML(
+      fa_icon(name = "calendar-day", fill = "#3d9970"),
+      paste0("Daily deaths: ", format(max(global_data$Date), '%d-%b-%Y'))
+    )
+  })
+
   output$highestDaily <- reactable::renderReactable({
+    latest_global_data() %>%
+      dplyr::filter(countriesAndTerritories != "Global") %>%
+      dplyr::arrange(desc(deaths)) %>%
+      dplyr::select(
+        Country = countriesAndTerritories,
+        Continent = continentExp,
+        `Daily deaths` = deaths,
+      ) %>%
+      summaryTab_table()
+  })
+
+  output$highestTotal <- reactable::renderReactable({
+    latest_global_data() %>%
+      dplyr::filter(countriesAndTerritories != "Global") %>%
+      dplyr::arrange(desc(totalDeaths)) %>%
+      dplyr::select(
+        Country = countriesAndTerritories,
+        Continent = continentExp,
+        `Total deaths` = totalDeaths
+      ) %>%
+      summaryTab_table()
+  })
+
+  output$biggestChange <- reactable::renderReactable({
+
     data <- input$sel_data
     data_name <- data_name()
 
-    if(input$sel_data %in% c("deaths", "cases", 'totalDeaths', "totalCases")) {
+    if(input$sel_data %in% c( "cases", "totalCases")) {
+
       latest_global_data() %>%
         dplyr::filter(countriesAndTerritories != "Global") %>%
         dplyr::arrange(desc(.data[[data]])) %>%

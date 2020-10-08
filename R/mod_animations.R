@@ -94,7 +94,7 @@ mod_animations_server <- function(input, output, session, global_data) {
       "Date (click play or move slider)",
       min = min_date(),
       max = max(global_data$Date),
-      value = lubridate::rollback(max(global_data$Date), months(1)),#max(min(global_data$Date), as.POSIXct("2020-03-01")),
+      value = lubridate::rollback(max(global_data$Date), months(1),roll_to_first = TRUE),#max(min(global_data$Date), as.POSIXct("2020-03-01")),
       width = "75%",
       timeFormat = "%d/%b",
       animate = animationOptions(interval = 1000, loop = FALSE)
