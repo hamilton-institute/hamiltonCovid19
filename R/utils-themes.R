@@ -55,7 +55,7 @@ theme_bs4Dash <- function() {
     ),
     fresh::bs4dash_layout(
       main_bg = "#ffffff",
-      sidebar_width = "220px"
+      sidebar_width = "180px"
     ),
     fresh::bs4dash_vars(
       body_color = status_para_cor("primary")

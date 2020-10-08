@@ -1,4 +1,3 @@
-#' Create text from Summary tab value boxes
 create_value_box_text <- function(title, change) {
   paste0(
     title,
@@ -7,7 +6,6 @@ create_value_box_text <- function(title, change) {
   )
 }
 
-#' Creates change message for the value boxes
 create_change_message <- function(value) {
   paste(
     html_arrow(value),
@@ -16,7 +14,6 @@ create_change_message <- function(value) {
   )
 }
 
-#' Returns a up, down or right arrow depending on the value
 html_arrow <- function(value) {
   if (value == 0)  {
     fa_icon(name = "arrow-right", fill = "#acabb0")
@@ -33,7 +30,6 @@ format_number <- function(value) {
     format(big.mark = ",")
 }
 
-#' Creates "last updated" message for the value boxes
 create_update_message <- function(date) {
   em("Updated: ", date, style = "font-size: 0.9vmax;")
 }

@@ -169,6 +169,16 @@ get_anim_variables <- function() {
   )
 }
 
+get_summary_variables <- function() {
+  c(
+    "14-days cases per 100k residents" = "totalCases14Days",
+    'Daily cases' = "cases",
+    "Total cases" = "totalCases",
+    "Cases increased since yesterday" = "changeCases",
+    "Deaths increased since yesterday" = "changeDeaths"
+  )
+}
+
 get_variable_name <- function(x, vars) {
   names(vars[vars == x]) %>%
     stringr::str_remove("Sqrt") %>%

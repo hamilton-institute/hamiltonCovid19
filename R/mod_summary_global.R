@@ -9,6 +9,7 @@
 #' @importFrom shiny NS tagList
 mod_summary_global_ui <- function(id){
   ns <- NS(id)
+  table_box_height <- "540px"
   tagList(
     fluidRow(
       col_5(
@@ -44,50 +45,53 @@ mod_summary_global_ui <- function(id){
     ),
     fluidRow(
       column(
-        width = 4,
-        offset = 8,
+        width = 3,
+        offset = 9,
         shinyWidgets::pickerInput(
-          inputId = ns("sel_data"),
-          label = "Select data",
-          choices = c(
-            "Deaths increased since yesterday" =  "changeDeaths",
-            'Daily cases' = "cases",
-            "Total cases" = "totalCases",
-            "Cases increased since yesterday" = "changeCases",
-            "14-days per 100k residents" = "Cumulative_number_for_14_days_of_COVID.19_cases_per_100000"
-          ),
-          selected = '14-days per 100k residents',
-          multiple = FALSE
+          inputId = ns("selVariable"),
+          label = "Select variable",
+          choices = get_summary_variables(),
+          selected = 'totalCases14Days',
+          multiple = FALSE,
+          width = "98%"
         )
       )
     ),
-
     fluidRow(
       col_4(
         custom_box(
           width = 12,
+          height = table_box_height,
           title = htmlOutput(ns("dailyDeathsTitle")),
-          reactable::reactableOutput(ns("highestDaily"))
+          div(
+            style = "overflow-y: auto; height: 500px;",
+            reactable::reactableOutput(ns("highestDaily"))
+          )
         )
       ),
       col_4(
         custom_box(
           width = 12,
+          height = table_box_height,
           HTML(
             fa_icon(name = "exclamation-triangle", fill = "#d81b60"),
             "Total deaths"
           ),
-          reactable::reactableOutput(ns("highestTotal"))
+          div(
+            style = "overflow-y: auto; height: 500px;",
+            reactable::reactableOutput(ns("highestTotal"))
+          )
         )
       ),
       col_4(
         custom_box(
           width = 12,
-          title = htmlOutput(ns("tableTitle")), #HTML(
-          #   fa_icon(name = "chart-line", fill = "#3c8dbc"),
-          #   "Deaths increase from yesterday"
-          # ),
-          reactable::reactableOutput(ns("biggestChange"))
+          height = table_box_height,
+          title = htmlOutput(ns("customTableTitle")),
+          div(
+            style = "overflow-y: auto; height: 500px;",
+            reactable::reactableOutput(ns("customTable"))
+          )
         )
       )
     )
@@ -195,23 +199,6 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   })
 
-  data_name <- reactive({
-    switch(
-      input$sel_data,
-      "cases" = 'Daily cases',
-      "totalCases" = "Total cases",
-      "changeDeaths" =  "Deaths increased since yesterday",
-      "changeCases" = "Cases increased since yesterday" ,
-      "Cumulative_number_for_14_days_of_COVID.19_cases_per_100000" = "14-days per 100k residents"
-    )
-  })
-
-  output$tableTitle <- renderUI({
-
-      HTML(fa_icon(name = "calendar-day", fill = "#3d9970"),
-           paste0(data_name(),": ", format(max(global_data$Date), '%d-%b-%Y')))
-  })
-
   output$dailyDeathsTitle <- renderUI({
     HTML(
       fa_icon(name = "calendar-day", fill = "#3d9970"),
@@ -243,39 +230,44 @@ mod_summary_global_server <- function(input, output, session, global_data) {
       summaryTab_table()
   })
 
-  output$biggestChange <- reactable::renderReactable({
+  output$customTableTitle <- renderUI({
+    HTML(
+      fa_icon(name = "chart-line", fill = "#3d9970"),
+      get_variable_name(input$selVariable, get_summary_variables())
+    )
+  })
 
-    data <- input$sel_data
-    data_name <- data_name()
-
-    if(input$sel_data %in% c( "cases", "totalCases")) {
-
+  output$customTable <- reactable::renderReactable({
+    if (input$selVariable %in% c("cases", "totalCases")) {
       latest_global_data() %>%
         dplyr::filter(countriesAndTerritories != "Global") %>%
-        dplyr::arrange(desc(.data[[data]])) %>%
+        dplyr::arrange(desc(.data[[input$selVariable]])) %>%
         dplyr::select(
           Country = countriesAndTerritories,
           Continent = continentExp,
-          {{data_name}} := .data[[data]]
-          ) %>%
+          Value = input$selVariable
+        ) %>%
         summaryTab_table()
-    } else{
-      if(input$sel_data %in% c('changeDeaths', "changeCases")) {
-        var <- stringr::str_remove(input$sel_data, "change") %>% stringr::str_to_lower()
-        name <- paste0("Change in ", var)
+    } else {
+      if (input$selVariable %in% c('changeDeaths', "changeCases")) {
         latest_global_data() %>%
-          dplyr::filter(countriesAndTerritories != 'Global',
-                        .data[[var]] != 0) %>%
-          dplyr::select(Country = countriesAndTerritories,
-                        Continent = continentExp,
-                        {{name}} := .data[[data]]) %>%
-          dplyr::arrange(desc(.data[[name]])) %>%
+          dplyr::filter(
+            countriesAndTerritories != 'Global',
+            .data[[input$selVariable]] != 0
+          ) %>%
+          dplyr::arrange(desc(.data[[input$selVariable]])) %>%
+          dplyr::select(
+            Country = countriesAndTerritories,
+            Continent = continentExp,
+            Value = input$selVariable
+          ) %>%
           summaryTab_table()
-      } else{
+
+      } else if (input$selVariable == "totalCases14Days") {
         latest_global_data() %>%
           dplyr::filter(countriesAndTerritories != "Global") %>%
           dplyr::mutate(
-            Value = round(Cumulative_number_for_14_days_of_COVID.19_cases_per_100000,1)
+            Value = round(.data[[input$selVariable]], 1)
           ) %>%
           dplyr::arrange(desc(Value)) %>%
           dplyr::select(

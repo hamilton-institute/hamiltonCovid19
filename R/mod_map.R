@@ -66,7 +66,7 @@ mod_map_server <- function(input, output, session, irish_county_data){
       sf::st_drop_geometry() %>%
       reactable::reactable(
         defaultPageSize = 20,
-        height = 1100,
+        height = 950,
         searchable = FALSE,
         pagination = FALSE,
         rownames = FALSE

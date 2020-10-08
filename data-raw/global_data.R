@@ -44,6 +44,9 @@ global_data <- global_data %>%
     casesPerMillion = 1e6 * totalCases / popData2019,
     deathsPerMillion = 1e6 * totalDeaths / popData2019
   ) %>%
+  rename(
+    totalCases14Days = Cumulative_number_for_14_days_of_COVID.19_cases_per_100000
+  ) %>%
   ungroup()
 
 usethis::use_data(global_data, overwrite = TRUE)

@@ -1,6 +1,6 @@
 .brand-link {
-    font-size: 0.9em;
-    line-height: 2.0em;
+    font-size: 1.1em !important;
+    line-height: 2.05em !important;
 }
 
 #summary_global_ui_1-wCasesBox .small-box>.inner,
@@ -25,4 +25,8 @@
 .js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {
   background: #046874 !important;
   border-color: #046874 !important;
+}
+
+body {
+  font-size: 0.85em !important;
 }

@@ -65,19 +65,3 @@ value_box_countries <- function(tab, variable, title, icon) {
     icon = icon
   )
 }
-
-function(x) {
-  switch(
-    input$sel_var[x],
-    'Cumulative cases' = 'cum_cases',
-    'Cumulative deaths' = 'cum_deaths',
-    'Daily cases' = 'cases',
-    'Daily deaths' = 'deaths',
-    'Logp1 cumulative cases' = 'cum_cases',
-    'Logp1 cumulative deaths' = 'cum_deaths',
-    'Logp1 daily cases' = 'cases',
-    'Logp1 daily deaths' = 'deaths',
-    'Cases per million population' = 'cases_per_million',
-    'Deaths per million population' = 'deaths_per_million'
-  )
-}
