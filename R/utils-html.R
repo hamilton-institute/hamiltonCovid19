@@ -92,8 +92,16 @@ fa_icon <- function(name, height = NULL, fill = NULL, top = "-0.1em") {
 sources_item <- function(link, icon, title) {
   tagList(
     a(
+      style = "margin-bottom: 13px;",
       href = link, target = "_blank",
-      h5(fa_icon(name = icon, fill = "#FFFFFF", height = "20px"), title)
+      h5(
+        fa_icon(
+          name = icon,
+          fill = status_para_cor("primary"),
+          height = "20px"
+        ),
+        title
+      )
     )
   )
 }

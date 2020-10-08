@@ -38,3 +38,6 @@
 #### 2020-09-30
 * Replaced DT with reactable
 * Created reactable theme
+
+#### 2020-10-08
+* Created distill theme

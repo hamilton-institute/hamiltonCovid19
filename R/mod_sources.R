@@ -10,7 +10,7 @@
 mod_sources_ui <- function(id){
   ns <- NS(id)
   tagList(
-    helpText(
+    div(style = "color: black;",
       h4("Data sources:"),
       sources_item(
         link = "https://www.ecdc.europa.eu/en",
@@ -39,15 +39,18 @@ mod_sources_ui <- function(id){
       p("The Northern Ireland figures are given by district which does not match precisely into counties. We have made an arbitrary decision as to which district are allocated to which counties. Details are provided in the GitHub repository in the Irish data spreadsheet"),
       br(),
       h6(
-        fa_icon(name = "users", fill = "#FFFFFF", height = "20px"),
+        style = "margin-bottom: 13px;",
+        fa_icon(name = "users", fill = status_para_cor("primary"), height = "20px"),
         'Contributors:', a("GitHub contributors page", href= "https://github.com/hamilton-institute/covid19ireland/graphs/contributors")
       ),
       h6(
-        fa_icon(name = "bug", fill = "#FFFFFF", height = "20px"),
+        style = "margin-bottom: 13px;",
+        fa_icon(name = "bug", fill = status_para_cor("primary"), height = "20px"),
         'Report bugs and suggest features at the', a("Github issues page", href= "https://github.com/hamilton-institute/covid19ireland/issues")
       ),
       h6(
-        fa_icon(name = "github", fill = "#FFFFFF", height = "20px"),
+        style = "margin-bottom: 13px;",
+        fa_icon(name = "github", fill = status_para_cor("primary"), height = "20px"),
         'See the code on ', a("Github", href= "https://github.com/hamilton-institute/covid19ireland")
       )
     )

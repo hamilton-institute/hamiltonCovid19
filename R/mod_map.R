@@ -11,20 +11,23 @@ mod_map_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      col_3(
+      col_4(
         custom_box(
           title = 'Cases by County',
           width = 12,
           height = 530,
-          textOutput(ns("updatedText")),
-          reactable::reactableOutput(
-            ns("countyCasesTable"),
-            height = "480px"
-          ) %>%
-            shinycssloaders::withSpinner(color = "#1E90FF")
+          htmlOutput(ns("updatedText")),
+          tags$div(
+            style = "overflow-y: scroll; height: 450px;",
+            reactable::reactableOutput(
+              ns("countyCasesTable"),
+              height = "480px"
+            ) %>%
+              shinycssloaders::withSpinner(color = "#1E90FF")
+          )
         )
       ),
-      col_9(
+      col_8(
         custom_box(
           title = "COVID-19 in Ireland",
           width = 12,
@@ -49,9 +52,11 @@ mod_map_server <- function(input, output, session, irish_county_data){
       dplyr::filter(Date == max(Date))
   })
 
-  output$updatedText <- renderText({
+  output$updatedText <- renderUI({
     latest_date <- max(irish_county_data$Date)
-    paste0("Updated: ", latest_date)
+    text <- paste0("Updated: ", latest_date)
+    color <- paste0("color: ", status_para_cor("primary"), ";")
+    tags$span(text, style = color)
   })
 
   output$countyCasesTable <- reactable::renderReactable({
@@ -61,7 +66,7 @@ mod_map_server <- function(input, output, session, irish_county_data){
       sf::st_drop_geometry() %>%
       reactable::reactable(
         defaultPageSize = 20,
-        height = 480,
+        height = 1100,
         searchable = FALSE,
         pagination = FALSE,
         rownames = FALSE
