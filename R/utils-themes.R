@@ -45,7 +45,8 @@ theme_bs4Dash <- function() {
       bg = status_para_cor("secondary")
     ),
     fresh::bs4dash_layout(
-      main_bg = "#ffffff"
+      main_bg = "#ffffff",
+      sidebar_width = "220px"
     )
   )
 }
@@ -54,7 +55,7 @@ status_para_cor <- function(status) {
   switch (status,
           primary = "#164b53",
           secondary = colorspace::lighten("#164b53", 0.99),
-          info = "#212529",
+          info = "#e9ecef",
           success = "#046874",
           warning = "#b99306",
           danger = "#bf281e")
@@ -97,14 +98,16 @@ status_para_cor <- function(status) {
 
 theme_reactable <- function() {
   reactable::reactableTheme(
-    color = "black",
+    color = status_para_cor("primary"),
     backgroundColor = "transparent",
     borderColor = "#343e48",
     stripedColor = status_para_cor("success"),
     highlightColor = status_para_cor("info"),
     inputStyle = list(backgroundColor = "white"),
     selectStyle = list(backgroundColor = "white"),
-    pageButtonHoverStyle = list(backgroundColor = "hsl(233, 9%, 25%)"),
+    pageButtonHoverStyle = list(
+      backgroundColor = status_para_cor("info")
+    ),
     pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")
   )
 }
