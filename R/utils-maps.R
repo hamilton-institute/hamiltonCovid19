@@ -1,4 +1,4 @@
-ireland_map <- function(tab) {
+ireland_map <- function(tab, title = "") {
 
   pal2 <- leaflet_map_pal(tab)
 
@@ -15,7 +15,8 @@ ireland_map <- function(tab) {
       fillOpacity = 0.7,
       fillColor = ~ pal2(log2(ConfirmedCovidCases)),
       label = ~ paste0(CountyName, ": ", ConfirmedCovidCases, ' cases')
-    )
+    ) %>%
+    leaflet::addControl(title, position = "topright")
 }
 
 leaflet_map_pal <- function(tab) {

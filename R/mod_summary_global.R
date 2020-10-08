@@ -43,31 +43,32 @@ mod_summary_global_ui <- function(id){
       )
     ),
     fluidRow(
-      col_4(
+      column(
+        width = 12,
+        shinyWidgets::pickerInput(
+          inputId = ns("sel_data"),
+          label = "Select data",
+          choices = c(
+            'Daily deaths' = "deaths",
+            'Daily cases' = "cases",
+            "Total deaths" = "totalDeaths",
+            "Total cases" = "totalCases",
+            "Deaths increased since yesterday" =  "changeDeaths",
+            "Cases increased since yesterday" = "changeCases",
+            "14-days per 100k residents" = "Cumulative_number_for_14_days_of_COVID.19_cases_per_100000"
+          ),
+          selected = 'Daily deaths',
+          multiple = FALSE
+        )
+      )
+    ),
+    fluidRow(
+      column(
+        width = 12,
         custom_box(
           width = 12,
-          title = htmlOutput(ns("dailyDeathsTitle")),
+          title = htmlOutput(ns("tableTitle")),
           reactable::reactableOutput(ns("highestDaily"))
-        )
-      ),
-      col_4(
-        custom_box(
-          width = 12,
-          title = HTML(
-            fa_icon(name = "exclamation-triangle", fill = "#d81b60"),
-            "Total deaths"
-          ),
-          reactable::reactableOutput(ns("highestTotal"))
-        )
-      ),
-      col_4(
-        custom_box(
-          width = 12,
-          title = HTML(
-            fa_icon(name = "chart-line", fill = "#3c8dbc"),
-            "Deaths increase from yesterday"
-          ),
-          reactable::reactableOutput(ns("biggestChange"))
         )
       )
     )
@@ -175,47 +176,66 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   })
 
-  output$dailyDeathsTitle <- renderUI({
-    HTML(
-      fa_icon(name = "calendar-day", fill = "#3d9970"),
-      paste0("Daily deaths: ", format(max(global_data$Date), '%d-%b-%Y'))
+  data_name <- reactive({
+    switch(
+      input$sel_data,
+      "deaths" = 'Daily deaths',
+      "cases" = 'Daily cases',
+      "totalDeaths" = "Total deaths",
+      "totalCases" = "Total cases",
+      "changeDeaths" =  "Deaths increased since yesterday",
+      "changeCases" = "Cases increased since yesterday" ,
+      "Cumulative_number_for_14_days_of_COVID.19_cases_per_100000" = "14-days per 100k residents"
     )
   })
 
+  output$tableTitle <- renderUI({
+
+      HTML(fa_icon(name = "calendar-day", fill = "#3d9970"),
+           paste0(data_name(),": ", format(max(global_data$Date), '%d-%b-%Y')))
+  })
+
   output$highestDaily <- reactable::renderReactable({
-    latest_global_data() %>%
-      dplyr::filter(countriesAndTerritories != "Global") %>%
-      dplyr::arrange(desc(deaths)) %>%
-      dplyr::select(
-        Country = countriesAndTerritories,
-        `Daily deaths` = deaths,
-      ) %>%
-      summaryTab_table()
-  })
+    data <- input$sel_data
+    data_name <- data_name()
 
-  output$highestTotal <- reactable::renderReactable({
-    latest_global_data() %>%
-      dplyr::filter(countriesAndTerritories != "Global") %>%
-      dplyr::arrange(desc(totalDeaths)) %>%
-      dplyr::select(
-        Country = countriesAndTerritories,
-        `Total deaths` = totalDeaths
-      ) %>%
-      summaryTab_table()
-  })
-
-  output$biggestChange <- reactable::renderReactable({
-    latest_global_data() %>%
-      dplyr::filter(
-        countriesAndTerritories != 'Global',
-        deaths != 0
-      ) %>%
-      dplyr::select(
-        Country = countriesAndTerritories,
-        `Change in deaths` = changeDeaths
-      ) %>%
-      dplyr::arrange(desc(`Change in deaths`)) %>%
-      summaryTab_table()
+    if(input$sel_data %in% c("deaths", "cases", 'totalDeaths', "totalCases")) {
+      latest_global_data() %>%
+        dplyr::filter(countriesAndTerritories != "Global") %>%
+        dplyr::arrange(desc(.data[[data]])) %>%
+        dplyr::select(
+          Country = countriesAndTerritories,
+          Continent = continentExp,
+          {{data_name}} := .data[[data]]
+          ) %>%
+        summaryTab_table()
+    } else{
+      if(input$sel_data %in% c('changeDeaths', "changeCases")) {
+        var <- stringr::str_remove(input$sel_data, "change") %>% stringr::str_to_lower()
+        name <- paste0("Change in ", var)
+        latest_global_data() %>%
+          dplyr::filter(countriesAndTerritories != 'Global',
+                        .data[[var]] != 0) %>%
+          dplyr::select(Country = countriesAndTerritories,
+                        Continent = continentExp,
+                        {{name}} := .data[[data]]) %>%
+          dplyr::arrange(desc(.data[[name]])) %>%
+          summaryTab_table()
+      } else{
+        latest_global_data() %>%
+          dplyr::filter(countriesAndTerritories != "Global") %>%
+          dplyr::mutate(
+            Value = round(Cumulative_number_for_14_days_of_COVID.19_cases_per_100000,1)
+          ) %>%
+          dplyr::arrange(desc(Value)) %>%
+          dplyr::select(
+            Country = countriesAndTerritories,
+            Continent = continentExp,
+            Value
+          ) %>%
+          summaryTab_table()
+      }
+    }
   })
 
 }
