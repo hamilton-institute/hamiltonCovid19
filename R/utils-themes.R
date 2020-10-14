@@ -73,6 +73,11 @@ status_para_cor <- function(status) {
           danger = "#bf281e")
 }
 
+#'
+with_load_spinner <- function(ui_element, type = 4, color = status_para_cor("primary"), ...) {
+  shinycssloaders::withSpinner(ui_element, type = type, color = color, ...)
+}
+
 theme_reactable <- function() {
   reactable::reactableTheme(
     color = status_para_cor("primary"),
