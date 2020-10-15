@@ -22,7 +22,7 @@
     border-color: #164b53 !important;
 }
 
-.js-irs-0 .irs-single, .js-irs-0 .irs-bar-edge, .js-irs-0 .irs-bar {
+.irs-single,  .irs-bar-edge, .irs-bar {
   background: #046874 !important;
   border-color: #046874 !important;
 }
