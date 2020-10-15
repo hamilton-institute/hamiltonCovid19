@@ -7,9 +7,7 @@ ani_graph <- function(tab, ctry, x_pick, y_pick, date) {
       cases,
       deaths,
       countriesAndTerritories,
-      popData2019,
-      day,
-      month
+      popData2019
     ) %>%
     dplyr::group_by(countriesAndTerritories) %>%
     dplyr::arrange(Date) %>%

@@ -34,4 +34,4 @@ new_irish_data <- raw_irish_data %>%
     RequiringICUCovidCases
   )
 
-readr::write_rds(new_irish_data, "data-raw/rds/irish_data.rds")
+readr::write_rds(new_irish_data, "data-raw/rds/irish_data.rds", compress = "xz")
