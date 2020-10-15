@@ -63,10 +63,7 @@ mod_summary_global_ui <- function(id){
           width = 12,
           height = table_box_height,
           title = htmlOutput(ns("dailyDeathsTitle")),
-          div(
-            style = "overflow-y: auto; height: 500px;",
-            reactable::reactableOutput(ns("highestDaily"))
-          )
+          reactable::reactableOutput(ns("highestDaily"))
         )
       ),
       col_4(
@@ -77,10 +74,7 @@ mod_summary_global_ui <- function(id){
             fa_icon(name = "exclamation-triangle", fill = "#d81b60"),
             "Total deaths"
           ),
-          div(
-            style = "overflow-y: auto; height: 500px;",
-            reactable::reactableOutput(ns("highestTotal"))
-          )
+          reactable::reactableOutput(ns("highestTotal"))
         )
       ),
       col_4(
@@ -88,10 +82,7 @@ mod_summary_global_ui <- function(id){
           width = 12,
           height = table_box_height,
           title = htmlOutput(ns("customTableTitle")),
-          div(
-            style = "overflow-y: auto; height: 500px;",
-            reactable::reactableOutput(ns("customTable"))
-          )
+          reactable::reactableOutput(ns("customTable"))
         )
       )
     )

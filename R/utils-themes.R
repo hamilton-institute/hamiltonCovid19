@@ -76,7 +76,7 @@ status_para_cor <- function(status) {
 theme_reactable <- function() {
   reactable::reactableTheme(
     color = status_para_cor("primary"),
-    backgroundColor = "transparent",
+    backgroundColor = status_para_cor("secondary"),
     borderColor = "#343e48",
     stripedColor = status_para_cor("success"),
     highlightColor = status_para_cor("info"),
