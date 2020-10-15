@@ -8,10 +8,15 @@ app_server <- function(input, output, session) {
 
   # Data
 
+  data_repo <- "https://github.com/curso-r/hamiltonCovid19/raw/master/"
+
   irish_data <- hamiltonCovid19::irish_data
   irish_county_data <- hamiltonCovid19::irish_county_data
 
-  global_data <- hamiltonCovid19::global_data
+  global_data <- download_from_github(
+    github_path = paste0(data_repo, "data-raw/rds/global_data.rds")
+  )
+
   # tab_last_updated <- hamiltonCovid19::tab_last_updated
 
   interventions_data <- hamiltonCovid19::interventions_data
