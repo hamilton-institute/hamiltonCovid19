@@ -2,6 +2,8 @@
 
 export("%>%")
 export(run_app)
+export(scrape_ecdc_data)
+export(status_para_cor)
 export(theme_bs4Dash)
 export(with_load_spinner)
 import(fresh)
