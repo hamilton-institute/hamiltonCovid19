@@ -63,6 +63,9 @@ theme_bs4Dash <- function() {
   )
 }
 
+#' color pallete
+#'
+#' @export
 status_para_cor <- function(status) {
   switch (status,
           primary = "#164b53",
