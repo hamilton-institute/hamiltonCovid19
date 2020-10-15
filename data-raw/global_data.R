@@ -11,7 +11,7 @@ if (is.null(raw_global_data)) {
 
 old_global_data <- readr::read_rds("data-raw/rds/raw_global_data.rds")
 
-if (identical(new_global_data, global_data)) {
+if (identical(raw_global_data, old_global_data)) {
   stop("Nothing to update.")
 }
 

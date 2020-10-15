@@ -9,6 +9,19 @@ scrape_ecdc_data <- function(url) {
   read.csv(url, na.strings = "", fileEncoding = "UTF-8-BOM")
 }
 
+#' Scrape Irish government data
+#'
+#' Scrape data from Irish government
+#'
+#' @return A data.frame.
+#' @export
+#'
+scrape_irl_data <- function(url) {
+  url %>%
+    RCurl::getURL() %>%
+    jsonlite::fromJSON() %>%
+    purrr::pluck("features", "properties")
+}
 
 download_from_github <- function(github_path) {
   file_name <- tempfile("temp.rds")
