@@ -17,14 +17,11 @@ mod_map_ui <- function(id){
           width = 12,
           height = 530,
           htmlOutput(ns("updatedText")),
-          tags$div(
-            style = "overflow-y: scroll; height: 450px;",
-            reactable::reactableOutput(
-              ns("countyCasesTable"),
-              height = "480px"
-            ) %>%
-              shinycssloaders::withSpinner(color = "#1E90FF")
-          )
+          reactable::reactableOutput(
+            ns("countyCasesTable"),
+            height = "480px"
+          ) %>%
+            shinycssloaders::withSpinner(color = "#1E90FF")
         )
       ),
       col_8(
@@ -66,7 +63,7 @@ mod_map_server <- function(input, output, session, irish_county_data){
       sf::st_drop_geometry() %>%
       reactable::reactable(
         defaultPageSize = 20,
-        height = 950,
+        height = 480,
         searchable = FALSE,
         pagination = FALSE,
         rownames = FALSE

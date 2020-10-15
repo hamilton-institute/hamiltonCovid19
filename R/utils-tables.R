@@ -15,6 +15,7 @@ summaryTab_table <- function(tab) {
     pagination = TRUE,
     rownames = TRUE,
     highlight = TRUE,
+    height = 500,
     paginationType = "simple",
     showPageInfo = FALSE,
     defaultColDef = reactable::colDef(
