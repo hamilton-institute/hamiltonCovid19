@@ -20,8 +20,6 @@ app_server <- function(input, output, session) {
 
   irish_county_data <- hamiltonCovid19::irish_county_data
 
-  # tab_last_updated <- hamiltonCovid19::tab_last_updated
-
   interventions_data <- hamiltonCovid19::interventions_data
 
   # Options
