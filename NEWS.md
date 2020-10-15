@@ -42,3 +42,4 @@
 #### 2020-10-08
 * Created distill theme
 * Added variable selector for ranking table in summary tab
+* Fixed the play bar to start on the 1st day of previous month in animations tab

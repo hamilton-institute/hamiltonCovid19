@@ -3,6 +3,7 @@
 export("%>%")
 export(run_app)
 export(theme_bs4Dash)
+export(with_load_spinner)
 import(fresh)
 import(shiny)
 importFrom(golem,activate_js)
