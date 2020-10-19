@@ -21,6 +21,7 @@ jobs:
         run: |
           Rscript -e "install.packages(c('rsconnect', 'remotes'), type = 'binary')"
       - name: Install deps
+        run: |
           Rscript -e "remotes::install_deps(dependencies = 'Imports')"
       - name: Push app to shiny.io
         run: |
