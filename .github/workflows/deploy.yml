@@ -19,8 +19,8 @@ jobs:
       - uses: r-lib/actions/setup-r@master
       - name: Install rsconnect
         run: |
-          Rscript -e install.packages("rsconnect"), type = "binary")
+          Rscript -e install.packages("rsconnect", type = "binary")
       - name: Push to shiny.io
         run: |
           Rscript -e "rsconnect::setAccountInfo(name='apmuhamilton', token=${{secrets.SHINYAPPS_TOKEN}}, secret=${{secrets.SHINYAPPS_SECRET}})"
-          Rscript -e "rsconnect::deployApp(appDir = ".", appFiles = list.files(".")[list.files(".") != "data-raw"], appName = "hamiltonCovid19Dashboard", forceUpdate = TRUE, account = "apmuhamilton")"
+          Rscript -e "rsconnect::deployApp(appFiles = list.files('.')[list.files('.') != 'data-raw'], appName = 'hamiltonCovid19Dashboard', forceUpdate = TRUE, account = 'apmuhamilton')"
