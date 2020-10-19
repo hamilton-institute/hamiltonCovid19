@@ -18,7 +18,9 @@ app_server <- function(input, output, session) {
     github_path = paste0(data_repo, "irish_data.rds")
   )
 
-  irish_county_data <- hamiltonCovid19::irish_county_data
+  irish_data <- download_from_github(
+    github_path = paste0(data_repo, "irish_county_data.rds")
+  )
 
   interventions_data <- hamiltonCovid19::interventions_data
 
