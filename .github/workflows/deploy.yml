@@ -19,7 +19,7 @@ jobs:
       - uses: r-lib/actions/setup-r@master
       - name: Install rsconnect
         run: |
-          Rscript -e install.packages("rsconnect", type = "binary")
+          Rscript -e "install.packages('rsconnect', type = 'binary')"
       - name: Push to shiny.io
         run: |
           Rscript -e "rsconnect::setAccountInfo(name='apmuhamilton', token=${{secrets.SHINYAPPS_TOKEN}}, secret=${{secrets.SHINYAPPS_SECRET}})"
