@@ -1,9 +1,13 @@
 ## Update global_data dataset
 
-devtools::load_all()
+`%>%` <- magrittr::`%>%`
 
 url_ecdc <- "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv"
-raw_global_data <- purrr::possibly(scrape_ecdc_data, otherwise = NULL)(url_ecdc)
+
+raw_global_data <- tryCatch(
+  read.csv(url_ecdc, na.strings = "", fileEncoding = "UTF-8-BOM"),
+  error = function(x) NULL
+)
 
 if (is.null(raw_global_data)) {
   stop(paste0("Failed to download a CSV file from ", url_ecdc))
@@ -12,6 +16,7 @@ if (is.null(raw_global_data)) {
 old_global_data <- readr::read_rds("data-raw/rds/raw_global_data.rds")
 
 if (identical(raw_global_data, old_global_data)) {
+  deploy_app <- TRUE
   stop("Nothing to update.")
 }
 
@@ -22,13 +27,13 @@ readr::write_rds(
 )
 
 # Fixing date
-new_global_data <- raw_global_data %>%
+global_data <- raw_global_data %>%
   dplyr::as_tibble() %>%
   dplyr::mutate(Date = as.Date(dateRep, tryFormats = "%d/%m/%Y")) %>%
   dplyr::select(-dateRep, -day, -month, -year)
 
 # Fixing country names
-new_global_data <- new_global_data %>%
+global_data <- global_data %>%
   dplyr::mutate(
     countriesAndTerritories = dplyr::case_when(
       countriesAndTerritories == 'Cases_on_an_international_conveyance_Japan' ~
@@ -45,7 +50,7 @@ new_global_data <- new_global_data %>%
   )
 
 # Calculating totals
-global_data_totals <- new_global_data %>%
+global_data_totals <- global_data %>%
   dplyr::mutate(popData2019 = as.numeric(popData2019)) %>%
   dplyr::group_by(Date) %>%
   dplyr::summarise(
@@ -56,10 +61,10 @@ global_data_totals <- new_global_data %>%
     countriesAndTerritories = 'Global'
   )
 
-new_global_data <- dplyr::bind_rows(new_global_data, global_data_totals)
+global_data <- dplyr::bind_rows(global_data, global_data_totals)
 
 # Log e cumulative values
-new_global_data <- new_global_data %>%
+global_data <- global_data %>%
   dplyr::group_by(countriesAndTerritories) %>%
   dplyr::arrange(Date, .by_group = TRUE) %>%
   dplyr::mutate(
@@ -77,5 +82,7 @@ new_global_data <- new_global_data %>%
   ) %>%
   dplyr::ungroup()
 
+deploy_app <- TRUE
+
 # Saving dataset
-readr::write_rds(new_global_data, "data-raw/rds/global_data.rds", compress = "xz")
+usethis::use_data(global_data, overwrite = TRUE)

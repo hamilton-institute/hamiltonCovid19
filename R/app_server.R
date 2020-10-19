@@ -8,25 +8,16 @@ app_server <- function(input, output, session) {
 
   # Data
 
-  data_repo <- "https://github.com/curso-r/hamiltonCovid19/raw/master/data-raw/rds/"
-
-  global_data <- download_from_github(
-    github_path = paste0(data_repo, "global_data.rds")
-  )
-
-  irish_data <- download_from_github(
-    github_path = paste0(data_repo, "irish_data.rds")
-  )
-
-  irish_data <- download_from_github(
-    github_path = paste0(data_repo, "irish_county_data.rds")
-  )
-
+  global_data <- hamiltonCovid19::global_data
+  irish_data <- hamiltonCovid19::irish_data
+  irish_county_data <- hamiltonCovid19::irish_county_data
   interventions_data <- hamiltonCovid19::interventions_data
 
   # Options
 
   options(reactable.theme = theme_reactable())
+
+  # Modules
 
   callModule(
     mod_summary_ireland_server,
