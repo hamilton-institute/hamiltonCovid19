@@ -17,10 +17,12 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: r-lib/actions/setup-r@master
-      - name: Install rsconnect
+      - name: Install rsconnect and remotes
         run: |
-          Rscript -e "install.packages('rsconnect', type = 'binary')"
-      - name: Push to shiny.io
+          Rscript -e "install.packages(c('rsconnect', 'remotes'), type = 'binary')"
+      - name: Install deps
+          Rscript -e "remotes::install_deps(dependencies = 'Imports')"
+      - name: Push app to shiny.io
         run: |
           Rscript -e "rsconnect::setAccountInfo(name='apmuhamilton', token=${{secrets.SHINYAPPS_TOKEN}}, secret=${{secrets.SHINYAPPS_SECRET}})"
           Rscript -e "rsconnect::deployApp(appFiles = list.files('.')[list.files('.') != 'data-raw'], appName = 'hamiltonCovid19Dashboard', forceUpdate = TRUE, account = 'apmuhamilton')"
