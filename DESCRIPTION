@@ -31,7 +31,8 @@ Imports:
     shinyWidgets,
     tibble,
     tidyr,
-    pkgload
+    pkgload,
+    fontawesome
 Remotes: 
     rstudio/fontawesome
 Encoding: UTF-8

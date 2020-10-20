@@ -22,7 +22,7 @@ jobs:
           Rscript -e "install.packages(c('rsconnect', 'remotes'), type = 'binary')"
       - name: Install deps
         run: |
-          Rscript -e "remotes::install_deps(dependencies = 'Imports')"
+          Rscript -e "remotes::install_deps(dependencies = TRUE)"
       - name: Push app to shiny.io
         run: |
           Rscript -e "rsconnect::setAccountInfo(name='apmuhamilton', token=${{secrets.SHINYAPPS_TOKEN}}, secret=${{secrets.SHINYAPPS_SECRET}})"
