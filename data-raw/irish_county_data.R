@@ -10,41 +10,41 @@ raw_irish_county_data <- tryCatch(
 )
 
 if (is.null(raw_irish_county_data)) {
-  stop(paste0("Failed to connect to ", url_irl))
+  message(paste0("Failed to connect to ", url_irl))
+} else {
+  old_irish_county_data <- readr::read_rds("data-raw/rds/raw_irish_county_data.rds")
+
+  if (identical(old_irish_county_data, raw_irish_county_data)) {
+    message("Nothing to update in irish_county_data.")
+  } else {
+    readr::write_rds(
+      raw_irish_county_data,
+      "data-raw/rds/raw_irish_county_data.rds",
+      compress = "xz"
+    )
+
+    geo_irish_county <- sf::st_read("data-raw/geojson/counties_simple.geojson")
+
+    irish_county_data <- raw_irish_county_data %>%
+      dplyr::mutate(Date = as.Date(TimeStamp)) %>%
+      # dplyr::add_count(CountyName) %>%
+      # dplyr::filter(n == max(n)) %>%
+      dplyr::left_join(
+        geo_irish_county,
+        by = c("CountyName" = "NAME_TAG")
+      ) %>%
+      sf::st_as_sf() %>%
+      dplyr::select(
+        Date,
+        CountyName,
+        ConfirmedCovidCases:ConfirmedCovidRecovered,
+        LATITUDE, LONGITUDE,
+        geometry
+      )
+
+    deploy_app <- TRUE
+
+    usethis::use_data(irish_county_data, overwrite = TRUE)
+  }
 }
-
-old_irish_county_data <- readr::read_rds("data-raw/rds/raw_irish_county_data.rds")
-
-if (identical(old_irish_county_data, raw_irish_county_data)) {
-  stop("Nothing to update.")
-}
-
-readr::write_rds(
-  raw_irish_county_data,
-  "data-raw/rds/raw_irish_county_data.rds",
-  compress = "xz"
-)
-
-geo_irish_county <- sf::st_read("data-raw/geojson/counties_simple.geojson")
-
-irish_county_data <- raw_irish_county_data %>%
-  dplyr::mutate(Date = as.Date(TimeStamp)) %>%
-  # dplyr::add_count(CountyName) %>%
-  # dplyr::filter(n == max(n)) %>%
-  dplyr::left_join(
-    geo_irish_county,
-    by = c("CountyName" = "NAME_TAG")
-  ) %>%
-  sf::st_as_sf() %>%
-  dplyr::select(
-    Date,
-    CountyName,
-    ConfirmedCovidCases:ConfirmedCovidRecovered,
-    LATITUDE, LONGITUDE,
-    geometry
-  )
-
-deploy_app <- TRUE
-
-usethis::use_data(irish_county_data, overwrite = TRUE)
 

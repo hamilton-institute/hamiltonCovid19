@@ -23,7 +23,7 @@ jobs:
       - name: Install deps
         run: |
           Rscript -e "remotes::install_deps(dependencies = TRUE)"
-      - name: Push app to shiny.io
+      - name: Deploy app at shinyapps.io
         run: |
           Rscript -e "rsconnect::setAccountInfo(name='apmuhamilton', token=${{secrets.SHINYAPPS_TOKEN}}, secret=${{secrets.SHINYAPPS_SECRET}})"
           Rscript -e "rsconnect::deployApp(appFiles = list.files('.')[list.files('.') != 'data-raw'], appName = 'hamiltonCovid19Dashboard', forceUpdate = TRUE, account = 'apmuhamilton')"
