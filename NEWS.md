@@ -47,3 +47,7 @@
 #### 2020-10-15
 * Minor changes to the CSS file
 
+#### 2020-10-19
+* Created scrape scripts
+* Added Github Actions to automatic deploy
+
