@@ -30,3 +30,8 @@
 body {
   font-size: 0.85em !important;
 }
+
+.form-control{
+  color:#164b53 !important;
+  border-color:#164b53 !important;
+}
