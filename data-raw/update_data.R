@@ -36,4 +36,6 @@ if (deploy_app) {
     account = 'apmuhamilton'
   )
 
+} else {
+  message("Nothing to deploy.")
 }
