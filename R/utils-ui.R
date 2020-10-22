@@ -195,23 +195,27 @@ get_variable_name <- function(x, vars, remove_log_sqrt = TRUE) {
   }
 }
 
+default_countries <- function() {
+  c(
+    'France',
+    'Ireland',
+    'UK',
+    'USA',
+    'Spain',
+    'Belgium',
+    'Italy'
+  )
+}
 
 country_picker <- function(choices, id) {
   shinyWidgets::pickerInput(
     inputId = id,
     label = "Select countries",
     choices = choices,
-    selected = c(
-      'France',
-      'Ireland',
-      'UK',
-      'USA',
-      'Spain',
-      'Belgium',
-      'Italy'
-    ),
+    selected = default_countries(),
     options = list(`actions-box` = TRUE, `live-search` = TRUE),
-    multiple = TRUE
+    multiple = TRUE,
+    width = "100%"
   )
 }
 

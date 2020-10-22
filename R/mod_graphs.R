@@ -11,9 +11,9 @@ mod_graphs_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      col_3(
+      col_4(
         offset = 1,
-        uiOutput(ns("ui_sel_ctry"))
+        country_picker(default_countries(), id = ns("sel_ctry")),
       ),
       col_3(
         uiOutput(ns("ui_sel_var"))
@@ -30,7 +30,18 @@ mod_graphs_ui <- function(id){
             'Days since 10th death'
           ),
           selected = c('Date'),
-          multiple = FALSE
+          multiple = FALSE,
+          width = "100%"
+        )
+      )
+    ),
+    fluidRow(
+      col_10(
+        offset = 1,
+        bs4Dash::bs4Alert(
+          width = 12,
+          title = "Select only one country to select multiple variables.",
+          status = "info"
         )
       )
     ),
@@ -55,12 +66,14 @@ mod_graphs_ui <- function(id){
 mod_graphs_server <- function(input, output, session, global_data) {
   ns <- session$ns
 
-  output$ui_sel_ctry <- renderUI({
-    global_data %>%
+  shinyWidgets::updatePickerInput(
+    session = session,
+    inputId = "sel_ctry",
+    choices = global_data %>%
       dplyr::pull(countriesAndTerritories) %>%
-      unique() %>%
-      country_picker(id = ns("sel_ctry"))
-  })
+      unique(),
+    selected = default_countries()
+  )
 
   output$ui_sel_var <- renderUI({
 
@@ -78,7 +91,8 @@ mod_graphs_server <- function(input, output, session, global_data) {
         label = "Select variables",
         choices = "",
         selected = "",
-        multiple = FALSE
+        multiple = FALSE,
+        width = "100%"
       )
     } else if (length(input$sel_ctry) > 1) {
       shinyWidgets::pickerInput(
@@ -86,7 +100,8 @@ mod_graphs_server <- function(input, output, session, global_data) {
         label = "Select variables",
         choices = create_trigger_value(get_graph_variables(), trigger_value),
         selected = create_trigger_value(var_selected, trigger_value),
-        multiple = FALSE
+        multiple = FALSE,
+        width = "100%"
       )
     } else {
       shinyWidgets::pickerInput(
@@ -94,7 +109,8 @@ mod_graphs_server <- function(input, output, session, global_data) {
         label = "Select variables",
         choices = create_trigger_value(get_graph_variables(), trigger_value),
         selected = create_trigger_value(var_selected, trigger_value),
-        multiple = TRUE
+        multiple = TRUE,
+        width = "100%"
       )
     }
 
