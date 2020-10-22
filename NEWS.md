@@ -52,7 +52,7 @@
 * Added Github Actions to automatic deploy
 
 #### 2020-10-21
-* Fixed #12: remove axis label from legend on "graphs" tab
-* Fixed #22: add variable option in Graphs tab
+* Fixed issue 12: remove axis label from legend on "graphs" tab
+* Fixed issue 22: add variable option in Graphs tab
 * Now it is only possible to select multiple variables in the "graphs" tab if only one country is selected
 
