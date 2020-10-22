@@ -30,3 +30,20 @@
 body {
   font-size: 0.85em !important;
 }
+
+.bg-info, .alert-info {
+    background-color: #F9FEFF!important;
+}
+
+.bg-info, .alert-info, .bg-info>a, .alert-info>a {
+    color: #164b53!important;
+}
+
+.alert h5 {
+    font-size: 1rem !important;
+        margin-bottom: 0 !important;
+}
+
+.alert-dismissible .close, .alert-dismissible .mailbox-attachment-close {
+    top: -5px !important;
+}

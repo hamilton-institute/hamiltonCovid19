@@ -69,8 +69,10 @@ if (is.null(raw_global_data)) {
         changeDeaths = deaths - lag(deaths),
         totalCases = cumsum(cases),
         totalDeaths = cumsum(deaths),
-        logTotalCases = log(totalCases),
-        logTotalDeaths = log(totalDeaths),
+        logp1Cases = log(cases + 1),
+        logp1Deaths = log(deaths + 1),
+        logp1TotalCases = log(totalCases + 1),
+        logp1TotalDeaths = log(totalDeaths + 1),
         casesPerMillion = 1e6 * totalCases / popData2019,
         deathsPerMillion = 1e6 * totalDeaths / popData2019
       ) %>%
