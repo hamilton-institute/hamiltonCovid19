@@ -311,3 +311,77 @@ interv_graph <- function(tab) {
   plotly::ggplotly(p, tooltip = c("label")) %>%
     plotly::layout(margin = list(l = 75))
 }
+
+graphs_tab_plot <- function(tab, variables, x_pick) {
+
+  n_countries <- dplyr::n_distinct(tab$countriesAndTerritories)
+  n_vars <- length(variables)
+
+  if (n_countries > 1 | n_vars == 1) {
+    graphs_tab_plot_(tab, "countriesAndTerritories", variables, x_pick)
+  } else {
+    graphs_tab_plot_(tab, "Type", variables, x_pick)
+  }
+
+}
+
+graphs_tab_plot_ <- function(tab, color_var, variables, x_pick) {
+
+  if (color_var == "countriesAndTerritories") {
+    colours <-  pick_colors(tab, popData2019, countriesAndTerritories)
+  } else {
+    colours <-  pick_colors(tab, popData2019, Type)
+  }
+
+  if(x_pick == 'Date') {
+    x_scale <- ggplot2::scale_x_date(
+      breaks = '1 week',
+      labels = scales::label_date("%d%b")
+    )
+
+    x_text_theme <- ggplot2::theme(
+      axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)
+    )
+  } else {
+    x_scale <- ggplot2::scale_x_continuous(
+      breaks =  scales::breaks_pretty(n = 10),
+      labels = scales::comma
+    )
+
+    x_text_theme <- ggplot2::theme()
+  }
+
+  y_lab <- ifelse(
+    color_var == "Type",
+    "Value",
+    get_variable_name(variables, get_graph_variables())
+  )
+
+  p <- tab %>%
+    ggplot2::ggplot(
+      ggplot2::aes_string(
+        x = x_pick,
+        y = "Value",
+        colour = color_var,
+        label = "data_point",
+        group = color_var
+      )
+    ) +
+    ggplot2::geom_line() +
+    ggplot2::labs(
+      y = y_lab,
+      x = names(x_pick),
+      color = ""
+    ) +
+    ggplot2::scale_color_manual(values = colours) +
+    x_scale +
+    theme_shiny_dashboard() +
+    x_text_theme +
+    ggplot2::scale_y_continuous(
+      labels = scales::comma,
+      breaks = scales::breaks_pretty(n = 5)
+    )
+
+  plotly::ggplotly(p, tooltip = c("label")) %>%
+    plotly::layout(margin = list(l = 75))
+}

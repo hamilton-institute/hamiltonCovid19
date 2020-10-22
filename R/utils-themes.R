@@ -81,7 +81,6 @@ status_para_cor <- function(status) {
 #'
 #' @export
 #'
-
 with_load_spinner <- function(ui_element, type = 4, color = status_para_cor("primary"), ...) {
   shinycssloaders::withSpinner(ui_element, type = type, color = color, ...)
 }
@@ -100,4 +99,8 @@ theme_reactable <- function() {
     ),
     pageButtonActiveStyle = list(backgroundColor = "hsl(233, 9%, 28%)")
   )
+}
+
+create_color_pal <- function(n) {
+  colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))(n)
 }

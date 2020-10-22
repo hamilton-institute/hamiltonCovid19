@@ -16,13 +16,7 @@ mod_graphs_ui <- function(id){
         uiOutput(ns("ui_sel_ctry"))
       ),
       col_3(
-        shinyWidgets::pickerInput(
-          inputId = ns("sel_var"),
-          label = "Select variables",
-          choices = get_graph_variables(),
-          selected = c('deaths_per_million'),
-          multiple = TRUE
-        )
+        uiOutput(ns("ui_sel_var"))
       ),
       col_3(
         shinyWidgets::pickerInput(
@@ -35,7 +29,7 @@ mod_graphs_ui <- function(id){
             'Days since 1st death',
             'Days since 10th death'
           ),
-          selected = c('Days since 1st death'),
+          selected = c('Date'),
           multiple = FALSE
         )
       )
@@ -68,143 +62,127 @@ mod_graphs_server <- function(input, output, session, global_data) {
       country_picker(id = ns("sel_ctry"))
   })
 
-  output$CountryPlot <- plotly::renderPlotly({
+  output$ui_sel_var <- renderUI({
+
+    trigger_value <- runif(1)
+
+    var_selected <- ifelse(
+      isTruthy(isolate(input$sel_var)),
+      remove_trigger_value(isolate(input$sel_var)),
+      "totalCases14Days"
+    )
+
+    if (!isTruthy(input$sel_ctry)) {
+      shinyWidgets::pickerInput(
+        inputId = ns("sel_var"),
+        label = "Select variables",
+        choices = "",
+        selected = "",
+        multiple = FALSE
+      )
+    } else if (length(input$sel_ctry) > 1) {
+      shinyWidgets::pickerInput(
+        inputId = ns("sel_var"),
+        label = "Select variables",
+        choices = create_trigger_value(get_graph_variables(), trigger_value),
+        selected = create_trigger_value(var_selected, trigger_value),
+        multiple = FALSE
+      )
+    } else {
+      shinyWidgets::pickerInput(
+        inputId = ns("sel_var"),
+        label = "Select variables",
+        choices = create_trigger_value(get_graph_variables(), trigger_value),
+        selected = create_trigger_value(var_selected, trigger_value),
+        multiple = TRUE
+      )
+    }
+
+  })
+
+  countries_tab <- reactive({
 
     validate(
       need(
-        length(input$sel_ctry) > 0,
+        isTruthy(input$sel_var),
         "Please select some countries. Use Global for worldwide values.")
     )
 
-    global_agg <- global_data %>%
-      dplyr::filter(countriesAndTerritories %in% input$sel_ctry) %>%
-      dplyr::select(
-        Date,
-        cases,
-        deaths,
-        countriesAndTerritories,
-        popData2019
-      ) %>%
-      dplyr::group_by(countriesAndTerritories) %>%
-      dplyr::arrange(Date) %>%
-      dplyr::mutate(
-        cum_cases = cumsum(cases),
-        cum_deaths = cumsum(deaths),
-        cases_per_million = 1e6 * cumsum(cases) / popData2019,
-        deaths_per_million = 1e6 * cumsum(deaths) / popData2019
-      ) %>%
-      dplyr::ungroup() %>%
-      dplyr::mutate(
-        dplyr::across(
-          c("cases", "deaths", "cum_cases", "cum_deaths"),
-          ~ .x + 1,
-          .names = "log_{col}"
-        )
-      )
+    global_data %>%
+      dplyr::filter(countriesAndTerritories %in% isolate(input$sel_ctry))
 
-    create_color_pal <- colorRampPalette(RColorBrewer::brewer.pal(8, "Set1"))
+  })
 
-    country_colours <-  global_agg %>%
-      dplyr::arrange(desc(popData2019)) %>%
-      dplyr::distinct(countriesAndTerritories) %>%
-      dplyr::mutate(
-        Colours = create_color_pal(dplyr::n())
-      ) %>%
-      tibble::deframe()
+  x_pick <- reactive({
+    if (input$sel_axis == "Date") {
+      x_pick <- c("Date" = "Date")
+    } else {
+      purrr::set_names("days_since", input$sel_axis)
+    }
+  })
 
-    x_pick <- switch(
-      input$sel_axis,
-      'Date' = 'Date',
-      'days_since'
-    )
+  plot_tab <- reactive({
 
-    if (input$sel_axis == 'Days since 1st case' | input$sel_axis == 'Date') {
-      global_agg = global_agg %>% dplyr::filter(cum_cases > 0)
-    } else if (input$sel_axis == 'Days since 1st death') {
-      global_agg = global_agg %>% dplyr::filter(cum_deaths > 0)
-    } else if (input$sel_axis == 'Days since 10th death') {
-      global_agg = global_agg %>% dplyr::filter(cum_deaths >= 10)
-    } else if (input$sel_axis == 'Days since 10th case') {
-      global_agg = global_agg %>% dplyr::filter(cum_cases >= 10)
+    tab <- countries_tab()
+    variables <- remove_trigger_value(isolate(input$sel_var))
+    x_var_name <- names(x_pick())
+
+    if (x_var_name %in% c('Days since 1st case', 'Date')) {
+      tab <- tab %>% dplyr::filter(totalCases > 0)
+    } else if (x_var_name == 'Days since 1st death') {
+      tab <- tab %>% dplyr::filter(totalDeaths > 0)
+    } else if (x_var_name == 'Days since 10th death') {
+      tab <- tab %>% dplyr::filter(totalDeaths >= 10)
+    } else if (x_var_name == 'Days since 10th case') {
+      tab <- tab %>% dplyr::filter(totalCases >= 10)
     }
 
-    global_agg <- global_agg %>%
+    tab <- tab %>%
+      dplyr::select(
+        Date, countriesAndTerritories, popData2019,
+        dplyr::one_of(variables)
+      ) %>%
       dplyr::group_by(countriesAndTerritories) %>%
       dplyr::mutate(days_since = 1:dplyr::n()) %>%
       dplyr::ungroup() %>%
       tidyr::pivot_longer(
         names_to = 'Type',
-        values_to = 'Number',
+        values_to = 'Value',
         -c(Date, countriesAndTerritories, popData2019, days_since)
       )
 
-    global_agg <- global_agg %>%
-      dplyr::filter(Type %in% input$sel_var)
-
-    global_agg <- global_agg %>%
+    tab <- tab %>%
       dplyr::mutate(
         data_point = paste0(
           "\ncountry: ",
-          global_agg$countriesAndTerritories,
+          .data[["countriesAndTerritories"]],
           "\nx_axis: ",
-          global_agg[[x_pick]],
+          .data[[x_pick()]],
           "\n",
           "y_axis: ",
           formatC(
-            signif(Number,digits = 3),
+            signif(Value, digits = 3),
             digits = 3,
             format = "fg",
             flag = "#"
           )
+        ),
+        Type = get_variable_name(
+          Type,
+          get_graph_variables(),
+          remove_log_sqrt  = FALSE
         )
       )
 
-    n_countries <- dplyr::n_distinct(global_agg$countriesAndTerritories)
+  })
 
-    n_vars <- length(input$sel_var)
+  output$CountryPlot <- plotly::renderPlotly({
 
-    p <- ggplot2::ggplot(
-      global_agg,
-      ggplot2::aes_string(
-        x = x_pick,
-        y = 'Number',
-        colour = 'countriesAndTerritories',
-        label = "data_point"
-      )
-    ) +
-      ggplot2::geom_line(ggplot2::aes(linetype = Type)) +
-      ggplot2::labs(
-        x = "", #input$sel_axis,
-        y = "" # paste(input$sel_var, collapse = ',')
-      ) +
-      ggplot2::scale_color_manual(values = country_colours) +
-      { if(x_pick == 'Date') {
-        ggplot2::scale_x_date(
-          breaks = '1 week',
-          labels = scales::label_date("%d%b")
-        )
-      } else {
-        ggplot2::scale_x_continuous(
-          breaks =  scales::breaks_pretty(n = 10),
-          labels = scales::comma
-        )
-      }} +
-      theme_shiny_dashboard() +
-      { if(x_pick == 'Date') ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1)) } +
-      ggplot2::theme(legend.title = ggplot2::element_blank()) +
-      {if (all(stringr::str_detect(input$sel_var,'Logp1')))  {
-        ggplot2::scale_y_continuous(trans = scales::log1p_trans(),
-                           labels = scales::comma,
-                           breaks = scales::breaks_log(n = 5))
-      } else {
-        ggplot2::scale_y_continuous(labels = scales::comma,
-                           breaks = scales::breaks_pretty(n = 5))
-      }} +
-      { if(n_countries * n_vars > 10) ggplot2::theme(legend.position = "none")}
+    req(plot_tab())
 
-    plotly::ggplotly(p, tooltip = c("label")) %>%
-      plotly::layout(margin = list(l = 75))
-    #ggplotly(p) %>% layout(margin = list(l = 75))
+    variables <- remove_trigger_value(isolate(input$sel_var))
+
+    graphs_tab_plot(plot_tab(), variables, isolate(x_pick()))
 
   })
 

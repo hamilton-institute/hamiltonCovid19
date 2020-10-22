@@ -128,8 +128,8 @@ get_inter_variables <- function() {
     'Cumulative deaths' = 'totalDeaths',
     'Daily cases' = 'cases',
     'Daily deaths' = 'deaths',
-    'Log cumulative cases' = 'logTotalCases',
-    'Log cumulative deaths' = 'logTotalDeaths',
+    'Log cumulative cases' = 'logp1TotalCases',
+    'Log cumulative deaths' = 'logp1TotalDeaths',
     'Cases per million population' = 'casesPerMillion',
     'Deaths per million population' = 'deathsPerMillion'
   )
@@ -137,16 +137,17 @@ get_inter_variables <- function() {
 
 get_graph_variables <- function() {
   c(
-    'Cumulative cases' = 'cum_cases',
-    'Cumulative deaths' = 'cum_deaths',
+    "14-days cases per 100k residents" = "totalCases14Days",
+    'Cumulative cases' = 'totalCases',
+    'Cumulative deaths' = 'totalDeaths',
     'Daily cases' = 'cases',
     'Daily deaths' = 'deaths',
-    'Logp1 cumulative cases' = 'log_cum_cases',
-    'Logp1 cumulative deaths' = 'log_cum_deaths',
-    'Logp1 daily cases' = 'log_cases',
-    'Logp1 daily deaths' = 'log_deaths',
-    'Cases per million population' = 'cases_per_million',
-    'Deaths per million population' = 'deaths_per_million'
+    'Logp1 cumulative cases' = 'logp1TotalCases',
+    'Logp1 cumulative deaths' = 'logp1TotalDeaths',
+    'Logp1 daily cases' = 'logp1Cases',
+    'Logp1 daily deaths' = 'logp1Deaths',
+    'Cases per million population' = 'casesPerMillion',
+    'Deaths per million population' = 'deathsPerMillion'
   )
 }
 
@@ -179,11 +180,19 @@ get_summary_variables <- function() {
   )
 }
 
-get_variable_name <- function(x, vars) {
-  names(vars[vars == x]) %>%
-    stringr::str_remove("Sqrt") %>%
-    stringr::str_remove("Logp1") %>%
-    stringr::str_to_sentence()
+get_variable_name <- function(x, vars, remove_log_sqrt = TRUE) {
+  var_names <- tibble::tibble(value = x) %>%
+    dplyr::left_join(tibble::enframe(vars), by = "value") %>%
+    dplyr::pull(name)
+
+  if(remove_log_sqrt) {
+    var_names %>%
+      stringr::str_remove("Sqrt") %>%
+      stringr::str_remove("Logp1") %>%
+      stringr::str_to_sentence()
+  } else {
+    var_names
+  }
 }
 
 

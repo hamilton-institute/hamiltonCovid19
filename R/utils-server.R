@@ -65,3 +65,24 @@ value_box_countries <- function(tab, variable, title, icon) {
     icon = icon
   )
 }
+
+pick_colors <- function(tab, ordering_col, grouping_col) {
+  tab %>%
+    dplyr::arrange(desc({{ordering_col}})) %>%
+    dplyr::distinct({{grouping_col}}) %>%
+    dplyr::mutate(
+      Colours = create_color_pal(dplyr::n())
+    ) %>%
+    tibble::deframe()
+}
+
+create_trigger_value <- function(x, value) {
+  purrr::set_names(
+    paste(x, value, sep = "@"),
+    names(x)
+  )
+}
+
+remove_trigger_value <- function(x) {
+  stringr::str_remove(x, "@.*$")
+}
