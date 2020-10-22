@@ -257,7 +257,10 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
       } else if (input$selVariable == "totalCases14Days") {
         latest_global_data() %>%
-          dplyr::filter(countriesAndTerritories != "Global") %>%
+          dplyr::filter(
+            countriesAndTerritories != "Global",
+            popData2019 > 1e6
+          ) %>%
           dplyr::mutate(
             Value = round(.data[[input$selVariable]], 1)
           ) %>%
