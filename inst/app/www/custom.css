@@ -7,8 +7,8 @@
 #summary_global_ui_1-wDeathsBox .small-box>.inner,
 #summary_global_ui_1-bigDailyBox .small-box>.inner,
 #summary_global_ui_1-worstHitCountryBox .small-box>.inner,
-#summary_global_ui_1-increaseDeathBox .small-box>.inner,
-#summary_global_ui_1-bigDecreaseBox .small-box>.inner {
+#summary_global_ui_1-highest14DayGlobal .small-box>.inner,
+#summary_global_ui_1-highest14DayEurope .small-box>.inner {
   height: 150px;
 }
 
