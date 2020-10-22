@@ -13,7 +13,7 @@ mod_map_ui <- function(id){
     fluidRow(
       col_4(
         custom_box(
-          title = 'Cases by County',
+          title = '14-day total cases per 100k residents by county',
           width = 12,
           height = 530,
           htmlOutput(ns("updatedText")),
@@ -26,7 +26,6 @@ mod_map_ui <- function(id){
       ),
       col_8(
         custom_box(
-          title = "COVID-19 in Ireland",
           width = 12,
           height = 530,
           leaflet::leafletOutput(ns('covidMap'), height = 500) %>%
@@ -58,8 +57,8 @@ mod_map_server <- function(input, output, session, irish_county_data){
 
   output$countyCasesTable <- reactable::renderReactable({
     latest_irish_county_data() %>%
-      dplyr::arrange(dplyr::desc(ConfirmedCovidCases)) %>%
-      dplyr::select(CountyName, `Number of Cases` = ConfirmedCovidCases) %>%
+      dplyr::arrange(dplyr::desc(last14per100k)) %>%
+      dplyr::select(CountyName, Value = last14per100k) %>%
       sf::st_drop_geometry() %>%
       reactable::reactable(
         defaultPageSize = 20,

@@ -29,6 +29,26 @@ if (is.null(raw_irish_county_data)) {
       dplyr::mutate(Date = as.Date(TimeStamp)) %>%
       # dplyr::add_count(CountyName) %>%
       # dplyr::filter(n == max(n)) %>%
+      dplyr::arrange(Date, CountyName) %>%
+      dplyr::group_by(CountyName) %>%
+      dplyr::mutate(DailyCases = c(0, diff(ConfirmedCovidCases))) %>%
+      dplyr::mutate(
+        last14per100k_raw = RcppRoll::roll_sum(
+          DailyCases,
+          14,
+          align = "right",
+          fill = 0
+        ),
+        last14per100k_raw = 1e5 * last14per100k_raw / PopulationCensus16,
+        last14per100k_raw = formatC(
+          signif(last14per100k_raw, digits = 3),
+          digits = 3,
+          format = "fg",
+          flag = "#"
+        ),
+        last14per100k = as.numeric(last14per100k_raw)
+      ) %>%
+      dplyr::ungroup() %>%
       dplyr::left_join(
         geo_irish_county,
         by = c("CountyName" = "NAME_TAG")
@@ -38,6 +58,7 @@ if (is.null(raw_irish_county_data)) {
         Date,
         CountyName,
         ConfirmedCovidCases:ConfirmedCovidRecovered,
+        last14per100k,
         LATITUDE, LONGITUDE,
         geometry
       )
