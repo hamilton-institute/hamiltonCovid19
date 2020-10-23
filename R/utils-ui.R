@@ -213,11 +213,7 @@ country_picker <- function(choices, id) {
     label = "Select countries",
     choices = choices,
     selected = default_countries(),
-    options = list(
-      `actions-box` = TRUE,
-      `live-search` = TRUE,
-      size = 10
-    ),
+    options = list(`actions-box` = TRUE, `live-search` = TRUE),
     multiple = TRUE,
     width = "100%"
   )

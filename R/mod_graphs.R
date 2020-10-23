@@ -66,16 +66,12 @@ mod_graphs_ui <- function(id){
 mod_graphs_server <- function(input, output, session, global_data) {
   ns <- session$ns
 
-  countries <- global_data %>%
-    dplyr::filter(countriesAndTerritories != "Global") %>%
-    dplyr::pull(countriesAndTerritories) %>%
-    unique()
-
   shinyWidgets::updatePickerInput(
     session = session,
     inputId = "sel_ctry",
-    label = "Select countries",
-    choices = c("Global", countries),
+    choices = global_data %>%
+      dplyr::pull(countriesAndTerritories) %>%
+      unique(),
     selected = default_countries()
   )
 

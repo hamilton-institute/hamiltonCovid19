@@ -34,11 +34,11 @@ mod_summary_global_ui <- function(id){
       ),
       col_4(
         shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("highest14DayGlobal"), width = 12),
+          bs4Dash::bs4ValueBoxOutput(ns("increaseDeathBox"), width = 12),
           color="#1E90FF"
         ),
         shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("highest14DayEurope"), width = 12),
+          bs4Dash::bs4ValueBoxOutput(ns("bigDecreaseBox"), width = 12),
           color="#1E90FF"
         )
       )
@@ -154,39 +154,38 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   })
 
-  output$highest14DayGlobal <- bs4Dash::renderbs4ValueBox({
+  output$increaseDeathBox <- bs4Dash::renderbs4ValueBox({
 
-    highest14Day <- latest_global_data() %>%
+    biggest_increase <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        popData2019 > 1e6
+        deaths != 0
       ) %>%
-      dplyr::slice_max(totalCases14Days, n = 1)
+      dplyr::slice_max(changeDeaths, n = 1)
 
     value_box_countries(
-      tab = highest14Day,
-      variable = totalCases14Days,
-      title = "Highest 14-day cases</br> per 100k: ",
+      tab = biggest_increase,
+      variable = changeDeaths,
+      title = "Biggest increase in deaths since</br> previous day: ",
       icon = "arrow-up"
     )
 
   })
 
-  output$highest14DayEurope <- bs4Dash::renderbs4ValueBox({
+  output$bigDecreaseBox <- bs4Dash::renderbs4ValueBox({
 
-    highest14Day <- latest_global_data() %>%
+    biggest_decrease <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        continentExp == "Europe",
-        popData2019 > 1e6
+        deaths != 0
       ) %>%
-      dplyr::slice_max(totalCases14Days, n = 1)
+      dplyr::slice_min(changeDeaths, n = 1)
 
     value_box_countries(
-      tab = highest14Day,
-      variable = totalCases14Days,
-      title = "Highest 14-day cases</br> per 100k in Europe: ",
-      icon = "arrow-up"
+      tab = biggest_decrease,
+      variable = changeDeaths,
+      title = "Biggest reduction in deaths since</br> previous day: ",
+      icon = "arrow-down"
     )
 
   })
@@ -257,12 +256,9 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
       } else if (input$selVariable == "totalCases14Days") {
         latest_global_data() %>%
-          dplyr::filter(
-            countriesAndTerritories != "Global",
-            popData2019 > 1e6
-          ) %>%
+          dplyr::filter(countriesAndTerritories != "Global") %>%
           dplyr::mutate(
-            Value = .data[[input$selVariable]]
+            Value = round(.data[[input$selVariable]], 1)
           ) %>%
           dplyr::arrange(desc(Value)) %>%
           dplyr::select(
@@ -270,7 +266,6 @@ mod_summary_global_server <- function(input, output, session, global_data) {
             Continent = continentExp,
             Value
           ) %>%
-          dplyr::mutate(Value = format_decimal_number(Value, numeric = FALSE)) %>%
           summaryTab_table()
       }
     }

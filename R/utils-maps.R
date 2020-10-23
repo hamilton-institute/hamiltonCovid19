@@ -13,14 +13,14 @@ ireland_map <- function(tab, title = "") {
       stroke = FALSE,
       smoothFactor = 0.3,
       fillOpacity = 0.7,
-      fillColor = ~ pal2(log2(last14per100k)),
-      label = ~ paste0(CountyName, ": ", last14per100k, ' cases')
+      fillColor = ~ pal2(log2(ConfirmedCovidCases)),
+      label = ~ paste0(CountyName, ": ", ConfirmedCovidCases, ' cases')
     ) %>%
     leaflet::addControl(title, position = "topright")
 }
 
 leaflet_map_pal <- function(tab) {
-  leaflet::colorNumeric("Blues", log2(tab$last14per100k))
+  leaflet::colorNumeric("Blues", log2(tab$ConfirmedCovidCases))
 }
 
 trend_icon <- function(url = NULL, width = 15, height = 15) {
@@ -47,12 +47,13 @@ leaflet_popup_plot <- function(tab, county) {
 
   number_cases <- tab %>%
     dplyr::filter(Date == latest_date) %>%
-    dplyr::pull(last14per100k)
+    dplyr::pull(ConfirmedCovidCases)
 
   tab %>%
+    dplyr::rename(`Number of Cases` = ConfirmedCovidCases) %>%
     ggplot2::ggplot(ggplot2::aes(
       x = as.Date(Date),
-      y = last14per100k,
+      y = `Number of Cases`,
       group = CountyName
     )) +
     ggplot2::geom_point() +
@@ -61,10 +62,11 @@ leaflet_popup_plot <- function(tab, county) {
     ggplot2::scale_x_date(breaks = scales::pretty_breaks(n = 10)) +
     ggplot2::scale_y_continuous(breaks = scales::pretty_breaks(n = 10)) +
     ggplot2::labs(
-      title = glue::glue("14-day cases per 100k in {county}"),
-      subtitle = glue::glue("at {latest_date}: {number_cases}"),
+      title = glue::glue(
+        "Total cases in {county} at {latest_date}: {number_cases}"
+      ),
       x = "Date",
-      y = "14-day number of cases per 100k residents"
+      y = "Number of individuals"
     ) +
     ggplot2::theme_bw() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))

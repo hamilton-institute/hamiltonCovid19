@@ -24,6 +24,12 @@ html_arrow <- function(value) {
   }
 }
 
+format_number <- function(value) {
+  value %>%
+    abs() %>%
+    format(big.mark = ",")
+}
+
 create_update_message <- function(date) {
   em("Updated: ", date, style = "font-size: 0.9vmax;")
 }

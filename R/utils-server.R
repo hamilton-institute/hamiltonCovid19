@@ -42,7 +42,8 @@ value_box_countries <- function(tab, variable, title, icon) {
   value <- tab %>%
     dplyr::slice(1) %>%
     dplyr::pull({{variable}}) %>%
-    format_number()
+    abs() %>%
+    format(big.mark = ',')
 
   bs4Dash::bs4ValueBox(
     value = tags$p(
@@ -84,25 +85,4 @@ create_trigger_value <- function(x, value) {
 
 remove_trigger_value <- function(x) {
   stringr::str_remove(x, "@.*$")
-}
-
-format_number <- function(value) {
-  value %>%
-    abs() %>%
-    round(1) %>%
-    format(big.mark = ",")
-}
-
-format_decimal_number <- function(x, numeric = TRUE) {
-  values <- formatC(
-    signif(x, digits = 3),
-    digits = 3,
-    format = "fg",
-    flag = "#"
-  )
-  if (numeric) {
-    as.numeric(values)
-  } else {
-    values
-  }
 }
