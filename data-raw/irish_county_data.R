@@ -14,7 +14,8 @@ if (is.null(raw_irish_county_data)) {
 } else {
   old_irish_county_data <- readr::read_rds("data-raw/rds/raw_irish_county_data.rds")
 
-  if (identical(old_irish_county_data, raw_irish_county_data)) {
+  if (identical(old_irish_county_data, raw_irish_county_data) |
+      nrow(old_irish_county_data) > nrow(raw_irish_county_data)) {
     message("Nothing to update in irish_county_data.")
   } else {
     readr::write_rds(
