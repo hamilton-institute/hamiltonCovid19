@@ -60,3 +60,6 @@
 * Fixed issue 19: change value boxes variable in summary tab
 * Fixed issue 20: check 14-day cases per 100k residents table in summary tab
 * Fixed issue 21: change variable in map tab
+* Fixed issue 30: fix numbers in legend
+* Minor layout fixes in Summary tab
+* Removed spinners in Summary tab that was making the app shake
