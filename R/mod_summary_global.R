@@ -262,7 +262,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
             popData2019 > 1e6
           ) %>%
           dplyr::mutate(
-            Value = round(.data[[input$selVariable]], 1)
+            Value = .data[[input$selVariable]]
           ) %>%
           dplyr::arrange(desc(Value)) %>%
           dplyr::select(
@@ -270,6 +270,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
             Continent = continentExp,
             Value
           ) %>%
+          dplyr::mutate(Value = format_decimal_number(Value, numeric = FALSE)) %>%
           summaryTab_table()
       }
     }
