@@ -12,35 +12,23 @@ mod_summary_global_ui <- function(id){
   table_box_height <- "540px"
   tagList(
     fluidRow(
+      col_12(
+        tags$h2("Global"),
+        tags$hr()
+      )
+    ),
+    fluidRow(
       col_5(
-        shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("wCasesBox"), width = 12),
-          color="#1E90FF"
-        ),
-        shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("wDeathsBox"), width = 12),
-          color="#1E90FF"
-        )
+        bs4Dash::bs4ValueBoxOutput(ns("wCasesBox"), width = 12),
+        bs4Dash::bs4ValueBoxOutput(ns("wDeathsBox"), width = 12)
       ),
       col_3(
-        shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("bigDailyBox"), width = 12),
-          color="#1E90FF"
-        ),
-        shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("worstHitCountryBox"), width = 12),
-          color="#1E90FF"
-        )
+        bs4Dash::bs4ValueBoxOutput(ns("bigDailyBox"), width = 12),
+        bs4Dash::bs4ValueBoxOutput(ns("worstHitCountryBox"), width = 12)
       ),
       col_4(
-        shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("highest14DayGlobal"), width = 12),
-          color="#1E90FF"
-        ),
-        shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("highest14DayEurope"), width = 12),
-          color="#1E90FF"
-        )
+        bs4Dash::bs4ValueBoxOutput(ns("highest14DayGlobal"), width = 12),
+        bs4Dash::bs4ValueBoxOutput(ns("highest14DayEurope"), width = 12)
       )
     ),
     fluidRow(

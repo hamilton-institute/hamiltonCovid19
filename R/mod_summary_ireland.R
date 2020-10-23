@@ -50,12 +50,6 @@ mod_summary_ireland_ui <- function(id) {
       col_4(
         leaflet::leafletOutput(ns("irelandCovidMap"), height = 350)
       )
-    ),
-    fluidRow(
-      col_12(
-        tags$h2("Global"),
-        tags$hr()
-      )
     )
   )
 
