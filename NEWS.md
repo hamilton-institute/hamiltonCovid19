@@ -56,3 +56,7 @@
 * Fixed issue 22: add variable option in Graphs tab
 * Now it is only possible to select multiple variables in the "graphs" tab if only one country is selected
 
+#### 2020-10-23
+* Fixed issue 19: change value boxes variable in summary tab
+* Fixed issue 20: check 14-day cases per 100k residents table in summary tab
+* Fixed issue 21: change variable in map tab
