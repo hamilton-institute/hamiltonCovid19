@@ -68,7 +68,15 @@ mod_map_server <- function(input, output, session, irish_county_data){
         height = 430,
         searchable = FALSE,
         pagination = FALSE,
-        rownames = FALSE
+        rownames = FALSE,
+        columns = list(
+          CountyName = reactable::colDef(
+            align = "left"
+          ),
+          Value = reactable::colDef(
+            align = "right"
+          )
+        )
       )
   })
 
