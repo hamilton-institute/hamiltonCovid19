@@ -108,6 +108,7 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
   output$irelandCovidMap <- leaflet::renderLeaflet({
     irish_county_data %>%
       dplyr::filter(Date == max(Date)) %>%
+      dplyr::mutate(last14per100k = format_decimal_number(last14per100k)) %>%
       ireland_map(title = "14-day cases per 100,000 residents")
   })
 

@@ -34,11 +34,11 @@ mod_summary_global_ui <- function(id){
       ),
       col_4(
         shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("increaseDeathBox"), width = 12),
+          bs4Dash::bs4ValueBoxOutput(ns("highest14DayGlobal"), width = 12),
           color="#1E90FF"
         ),
         shinycssloaders::withSpinner(
-          bs4Dash::bs4ValueBoxOutput(ns("bigDecreaseBox"), width = 12),
+          bs4Dash::bs4ValueBoxOutput(ns("highest14DayEurope"), width = 12),
           color="#1E90FF"
         )
       )
@@ -154,38 +154,39 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   })
 
-  output$increaseDeathBox <- bs4Dash::renderbs4ValueBox({
+  output$highest14DayGlobal <- bs4Dash::renderbs4ValueBox({
 
-    biggest_increase <- latest_global_data() %>%
+    highest14Day <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        deaths != 0
+        popData2019 > 1e6
       ) %>%
-      dplyr::slice_max(changeDeaths, n = 1)
+      dplyr::slice_max(totalCases14Days, n = 1)
 
     value_box_countries(
-      tab = biggest_increase,
-      variable = changeDeaths,
-      title = "Biggest increase in deaths since</br> previous day: ",
+      tab = highest14Day,
+      variable = totalCases14Days,
+      title = "Highest 14-day cases</br> per 100k: ",
       icon = "arrow-up"
     )
 
   })
 
-  output$bigDecreaseBox <- bs4Dash::renderbs4ValueBox({
+  output$highest14DayEurope <- bs4Dash::renderbs4ValueBox({
 
-    biggest_decrease <- latest_global_data() %>%
+    highest14Day <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        deaths != 0
+        continentExp == "Europe",
+        popData2019 > 1e6
       ) %>%
-      dplyr::slice_min(changeDeaths, n = 1)
+      dplyr::slice_max(totalCases14Days, n = 1)
 
     value_box_countries(
-      tab = biggest_decrease,
-      variable = changeDeaths,
-      title = "Biggest reduction in deaths since</br> previous day: ",
-      icon = "arrow-down"
+      tab = highest14Day,
+      variable = totalCases14Days,
+      title = "Highest 14-day cases</br> per 100k in Europe: ",
+      icon = "arrow-up"
     )
 
   })
@@ -256,9 +257,12 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
       } else if (input$selVariable == "totalCases14Days") {
         latest_global_data() %>%
-          dplyr::filter(countriesAndTerritories != "Global") %>%
+          dplyr::filter(
+            countriesAndTerritories != "Global",
+            popData2019 > 1e6
+          ) %>%
           dplyr::mutate(
-            Value = round(.data[[input$selVariable]], 1)
+            Value = .data[[input$selVariable]]
           ) %>%
           dplyr::arrange(desc(Value)) %>%
           dplyr::select(
@@ -266,6 +270,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
             Continent = continentExp,
             Value
           ) %>%
+          dplyr::mutate(Value = format_decimal_number(Value, numeric = FALSE)) %>%
           summaryTab_table()
       }
     }

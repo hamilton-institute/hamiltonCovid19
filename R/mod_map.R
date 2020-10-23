@@ -11,22 +11,22 @@ mod_map_ui <- function(id){
   ns <- NS(id)
   tagList(
     fluidRow(
-      col_4(
+      col_5(
         custom_box(
-          title = 'Cases by County',
+          title = '14-day total cases per 100k residents by county',
           width = 12,
-          height = 530,
+          height = 485,
           htmlOutput(ns("updatedText")),
           reactable::reactableOutput(
             ns("countyCasesTable"),
-            height = "480px"
+            height = "430px"
           ) %>%
             shinycssloaders::withSpinner(color = "#1E90FF")
         )
       ),
-      col_8(
+      col_7(
         custom_box(
-          title = "COVID-19 in Ireland",
+          title = NULL,
           width = 12,
           height = 530,
           leaflet::leafletOutput(ns('covidMap'), height = 500) %>%
@@ -46,7 +46,8 @@ mod_map_server <- function(input, output, session, irish_county_data){
 
   latest_irish_county_data <- reactive({
     irish_county_data %>%
-      dplyr::filter(Date == max(Date))
+      dplyr::filter(Date == max(Date)) %>%
+      dplyr::mutate(last14per100k = format_decimal_number(last14per100k))
   })
 
   output$updatedText <- renderUI({
@@ -58,12 +59,13 @@ mod_map_server <- function(input, output, session, irish_county_data){
 
   output$countyCasesTable <- reactable::renderReactable({
     latest_irish_county_data() %>%
-      dplyr::arrange(dplyr::desc(ConfirmedCovidCases)) %>%
-      dplyr::select(CountyName, `Number of Cases` = ConfirmedCovidCases) %>%
+      dplyr::arrange(dplyr::desc(last14per100k)) %>%
+      dplyr::select(CountyName, Value = last14per100k) %>%
+      dplyr::mutate(Value = format_decimal_number(Value, numeric = FALSE)) %>%
       sf::st_drop_geometry() %>%
       reactable::reactable(
         defaultPageSize = 20,
-        height = 480,
+        height = 430,
         searchable = FALSE,
         pagination = FALSE,
         rownames = FALSE
@@ -81,8 +83,8 @@ mod_map_server <- function(input, output, session, irish_county_data){
       ) %>%
       leaflet::addLegend(
         pal = leaflet_map_pal(latest_irish_county_data()),
-        title = 'Cases',
-        values = ~log2(ConfirmedCovidCases),
+        title = '14-day cases per 100k',
+        values = ~log2(last14per100k),
         opacity = 1.0,
         labFormat = leaflet::labelFormat(transform = function(x) round(2^x))
       )
