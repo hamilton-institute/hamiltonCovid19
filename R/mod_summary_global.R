@@ -166,7 +166,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
     value_box_countries(
       tab = highest14Day,
       variable = totalCases14Days,
-      title = "Highest 14-day cases</br> per 100k: ",
+      title = "Highest 14-day cases per 100k: ",
       icon = "arrow-up"
     )
 
@@ -185,7 +185,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
     value_box_countries(
       tab = highest14Day,
       variable = totalCases14Days,
-      title = "Highest 14-day cases</br> per 100k in Europe: ",
+      title = "Highest 14-day cases per 100k in Europe: ",
       icon = "arrow-up"
     )
 
