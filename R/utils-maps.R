@@ -13,14 +13,14 @@ ireland_map <- function(tab, title = "") {
       stroke = FALSE,
       smoothFactor = 0.3,
       fillOpacity = 0.7,
-      fillColor = ~ pal2(log2(last14per100k)),
-      label = ~ paste0(CountyName, ": ", last14per100k, ' cases')
+      fillColor = ~ pal2(last14per100k),
+      label = ~ paste0(CountyName, ": ", last14per100k, ' 14-day cases per 100k')
     ) %>%
     leaflet::addControl(title, position = "topright")
 }
 
 leaflet_map_pal <- function(tab) {
-  leaflet::colorNumeric("Blues", log2(tab$last14per100k))
+  leaflet::colorNumeric("Blues", tab$last14per100k)
 }
 
 trend_icon <- function(url = NULL, width = 15, height = 15) {

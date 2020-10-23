@@ -84,9 +84,8 @@ mod_map_server <- function(input, output, session, irish_county_data){
       leaflet::addLegend(
         pal = leaflet_map_pal(latest_irish_county_data()),
         title = '14-day cases per 100k',
-        values = ~log2(last14per100k),
-        opacity = 1.0,
-        labFormat = leaflet::labelFormat(transform = function(x) round(2^x))
+        values = ~last14per100k,
+        opacity = 1.0
       )
   })
 
