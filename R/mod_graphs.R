@@ -86,7 +86,7 @@ mod_graphs_server <- function(input, output, session, global_data) {
     var_selected <- ifelse(
       isTruthy(isolate(input$sel_var)),
       remove_trigger_value(isolate(input$sel_var)),
-      "totalCases14Days"
+      "last14per100k"
     )
 
     if (!isTruthy(input$sel_ctry)) {

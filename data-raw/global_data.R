@@ -27,7 +27,10 @@ if (is.null(raw_global_data)) {
     global_data <- raw_global_data %>%
       dplyr::as_tibble() %>%
       dplyr::mutate(Date = as.Date(dateRep, tryFormats = "%d/%m/%Y")) %>%
-      dplyr::select(-dateRep, -day, -month, -year)
+      dplyr::select(
+        -dateRep, -day, -month, -year,
+        -Cumulative_number_for_14_days_of_COVID.19_cases_per_100000
+      )
 
     # Fixing country names
     global_data <- global_data %>%
@@ -54,9 +57,7 @@ if (is.null(raw_global_data)) {
         dplyr::across(c("deaths", "cases", "popData2019"), sum, na.rm = TRUE),
         .groups = "drop"
       ) %>%
-      dplyr::mutate(
-        countriesAndTerritories = 'Global'
-      )
+      dplyr::mutate(countriesAndTerritories = 'Global')
 
     global_data <- dplyr::bind_rows(global_data, global_data_totals)
 
@@ -74,10 +75,14 @@ if (is.null(raw_global_data)) {
         logp1TotalCases = log(totalCases + 1),
         logp1TotalDeaths = log(totalDeaths + 1),
         casesPerMillion = 1e6 * totalCases / popData2019,
-        deathsPerMillion = 1e6 * totalDeaths / popData2019
-      ) %>%
-      dplyr::rename(
-        totalCases14Days = Cumulative_number_for_14_days_of_COVID.19_cases_per_100000
+        deathsPerMillion = 1e6 * totalDeaths / popData2019,
+        last14per100k = RcppRoll::roll_sum(
+          cases,
+          14,
+          align = "right",
+          fill = 0
+        ),
+        last14per100k = 1e5 * last14per100k / popData2019
       ) %>%
       dplyr::ungroup()
 

@@ -39,7 +39,7 @@ mod_summary_global_ui <- function(id){
           inputId = ns("selVariable"),
           label = "Select variable",
           choices = get_summary_variables(),
-          selected = 'totalCases14Days',
+          selected = 'last14per100k',
           multiple = FALSE,
           width = "98%"
         )
@@ -149,11 +149,11 @@ mod_summary_global_server <- function(input, output, session, global_data) {
         countriesAndTerritories != 'Global',
         popData2019 > 1e6
       ) %>%
-      dplyr::slice_max(totalCases14Days, n = 1)
+      dplyr::slice_max(last14per100k, n = 1)
 
     value_box_countries(
       tab = highest14Day,
-      variable = totalCases14Days,
+      variable = last14per100k,
       title = "Highest 14-day cases per 100k: ",
       icon = "arrow-up"
     )
@@ -168,11 +168,11 @@ mod_summary_global_server <- function(input, output, session, global_data) {
         continentExp == "Europe",
         popData2019 > 1e6
       ) %>%
-      dplyr::slice_max(totalCases14Days, n = 1)
+      dplyr::slice_max(last14per100k, n = 1)
 
     value_box_countries(
       tab = highest14Day,
-      variable = totalCases14Days,
+      variable = last14per100k,
       title = "Highest 14-day cases per 100k in Europe: ",
       icon = "arrow-up"
     )
@@ -243,7 +243,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
           ) %>%
           summaryTab_table()
 
-      } else if (input$selVariable == "totalCases14Days") {
+      } else if (input$selVariable == "last14per100k") {
         latest_global_data() %>%
           dplyr::filter(
             countriesAndTerritories != "Global",
