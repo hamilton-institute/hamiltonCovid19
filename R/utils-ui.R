@@ -137,7 +137,7 @@ get_inter_variables <- function() {
 
 get_graph_variables <- function() {
   c(
-    "14-days cases per 100k residents" = "totalCases14Days",
+    "14-days cases per 100k residents" = "last14per100k",
     'Cumulative cases' = 'totalCases',
     'Cumulative deaths' = 'totalDeaths',
     'Daily cases' = 'cases',
@@ -172,7 +172,7 @@ get_anim_variables <- function() {
 
 get_summary_variables <- function() {
   c(
-    "14-days cases per 100k residents" = "totalCases14Days",
+    "14-days cases per 100k residents" = "last14per100k",
     'Daily cases' = "cases",
     "Total cases" = "totalCases",
     "Cases increased since yesterday" = "changeCases",
