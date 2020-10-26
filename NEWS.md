@@ -1,5 +1,8 @@
 # hamiltonCovid19 0.0.0.9000
 
+#### 2020-10-26
+* Fixed issue 31: selecting global in country selection is not working
+
 #### 2020-10-23
 * Fixed issue 19: change value boxes variable in summary tab
 * Fixed issue 20: check 14-day cases per 100k residents table in summary tab
