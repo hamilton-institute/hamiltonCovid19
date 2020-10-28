@@ -5,7 +5,7 @@
 \alias{irish_data}
 \title{Irish government data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 214 rows and 5 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 220 rows and 5 columns.
 }
 \source{
 \url{https://opendata.arcgis.com}

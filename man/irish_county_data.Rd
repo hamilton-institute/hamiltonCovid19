@@ -5,7 +5,7 @@
 \alias{irish_county_data}
 \title{Irish county data}
 \format{
-An object of class \code{sf} (inherits from \code{data.frame}) with 6032 rows and 9 columns.
+An object of class \code{sf} (inherits from \code{tbl_df}, \code{tbl}, \code{data.frame}) with 6188 rows and 10 columns.
 }
 \source{
 \url{http://opendata-geohive.hub.arcgis.com}

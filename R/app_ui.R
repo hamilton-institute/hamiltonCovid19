@@ -82,7 +82,7 @@ create_sidebar <- function() {
 #' Creates app's body
 create_body <- function() {
   bs4Dash::bs4DashBody(
-    fresh::use_theme(theme_bs4Dash()),
+    fresh::use_theme(theme_bs4Dash_distill()),
     bs4Dash::bs4TabItems(
       bs4Dash::bs4TabItem(
         tabName = "summary",

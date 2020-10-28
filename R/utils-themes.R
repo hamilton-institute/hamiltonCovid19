@@ -23,12 +23,10 @@ theme_shiny_dashboard <- function (base_size = 12, base_family = "") {
     )
 }
 
-#' create_theme_css
+#' Create distill theme for bs4Dash
 #'
 #' @export
-#'
-#' @import fresh
-theme_bs4Dash <- function() {
+theme_bs4Dash_distill <- function() {
   fresh::create_theme(
     fresh::bs4dash_yiq(
       contrasted_threshold = 10,
@@ -62,6 +60,27 @@ theme_bs4Dash <- function() {
     )
   )
 }
+
+
+#' Create distill theme for bs4Dash
+#'
+#' @return
+#' @export
+theme_bs4Dash <- function() {
+  theme_bs4Dash_distill()
+}
+
+#' Use bs4Dash distill theme css
+#'
+#' @export
+use_css_bs4Dash_distill <- function() {
+  file.copy(
+    from = system.file("app/www/custom.css", package = "hamiltonCovid19"),
+    to = "app/www/custom.css"
+  )
+}
+
+
 
 #' color pallete
 #'
