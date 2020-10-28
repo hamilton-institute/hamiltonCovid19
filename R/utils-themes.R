@@ -72,11 +72,17 @@ theme_bs4Dash <- function() {
 
 #' Use bs4Dash distill theme css
 #'
+#' @param path Dir where the css file will be copied to.
+#' Default to inst/app/www/custom.css.
+#'
 #' @export
-use_css_bs4Dash_distill <- function() {
+use_css_bs4Dash_distill <- function(path = NULL) {
+  if (is.null(path)) {
+    path = "inst/app/www/custom.css"
+  }
   file.copy(
     from = system.file("app/www/custom.css", package = "hamiltonCovid19"),
-    to = "app/www/custom.css"
+    to = path
   )
 }
 

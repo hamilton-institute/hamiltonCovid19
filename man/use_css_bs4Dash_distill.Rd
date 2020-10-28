@@ -4,7 +4,11 @@
 \alias{use_css_bs4Dash_distill}
 \title{Use bs4Dash distill theme css}
 \usage{
-use_css_bs4Dash_distill()
+use_css_bs4Dash_distill(path = NULL)
+}
+\arguments{
+\item{path}{Dir where the css file will be copied to.
+Default to inst/app/www/custom.css.}
 }
 \description{
 Use bs4Dash distill theme css
