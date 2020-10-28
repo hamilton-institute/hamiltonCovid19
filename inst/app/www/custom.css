@@ -1,0 +1,49 @@
+.brand-link {
+    font-size: 1.1em !important;
+    line-height: 2.05em !important;
+}
+
+#summary_global_ui_1-wCasesBox .small-box>.inner,
+#summary_global_ui_1-wDeathsBox .small-box>.inner,
+#summary_global_ui_1-bigDailyBox .small-box>.inner,
+#summary_global_ui_1-worstHitCountryBox .small-box>.inner,
+#summary_global_ui_1-highest14DayGlobal .small-box>.inner,
+#summary_global_ui_1-highest14DayEurope .small-box>.inner {
+  height: 150px;
+}
+
+.card-title {
+  color: #164b53 !important;
+}
+
+.btn-light {
+    color: #164b53 !important;
+    background-color: #fff !important;
+    border-color: #164b53 !important;
+}
+
+.irs-single,  .irs-bar-edge, .irs-bar {
+  background: #046874 !important;
+  border-color: #046874 !important;
+}
+
+body {
+  font-size: 0.85em !important;
+}
+
+.bg-info, .alert-info {
+    background-color: #F9FEFF!important;
+}
+
+.bg-info, .alert-info, .bg-info>a, .alert-info>a {
+    color: #164b53!important;
+}
+
+.alert h5 {
+    font-size: 1rem !important;
+        margin-bottom: 0 !important;
+}
+
+.alert-dismissible .close, .alert-dismissible .mailbox-attachment-close {
+    top: -5px !important;
+}
