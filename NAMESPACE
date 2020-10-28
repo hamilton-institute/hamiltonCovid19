@@ -3,6 +3,7 @@
 export("%>%")
 export(run_app)
 export(status_para_cor)
+export(theme_bs4Dash)
 export(theme_bs4Dash_distill)
 export(use_css_bs4Dash_distill)
 export(with_load_spinner)

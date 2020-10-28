@@ -80,8 +80,6 @@ use_css_bs4Dash_distill <- function() {
   )
 }
 
-
-
 #' color pallete
 #'
 #' @export
