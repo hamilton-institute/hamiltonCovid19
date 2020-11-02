@@ -7,15 +7,16 @@ url_irl <- "http://opendata-geohive.hub.arcgis.com/datasets/d9be85b30d7748b5b7c0
 raw_irish_county_data <- tryCatch(
   read.csv(url_irl, stringsAsFactors = FALSE),
   error = function(x) NULL
-)
+) %>%
+  dplyr::select(-OBJECTID) %>%
+  dplyr::distinct()
 
 if (is.null(raw_irish_county_data)) {
   message(paste0("Failed to connect to ", url_irl))
 } else {
   old_irish_county_data <- readr::read_rds("data-raw/rds/raw_irish_county_data.rds")
 
-  if (identical(old_irish_county_data, raw_irish_county_data) |
-      nrow(old_irish_county_data) > nrow(raw_irish_county_data)) {
+  if (nrow(old_irish_county_data) >= nrow(raw_irish_county_data)) {
     message("Nothing to update in irish_county_data.")
   } else {
     readr::write_rds(
