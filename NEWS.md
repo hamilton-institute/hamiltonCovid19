@@ -1,5 +1,11 @@
 # hamiltonCovid19 0.0.0.9000
 
+#### 2020-11-03
+* Added tests for global_data, irish_data and irish_country_data update workflow.
+
+#### 2020-10-30
+* Transfered repository from curso-r to hamilton-institute organization.
+
 #### 2020-10-26
 * Fixed issue 31: selecting global in country selection is not working
 

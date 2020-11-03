@@ -39,7 +39,7 @@ if (is.null(raw_irish_county_data)) {
 
   if (nrow(old_irish_county_data) >= nrow(raw_irish_county_data)) {
     usethis::ui_done("Nothing to update in irish_county_data.")
-  } else if (nrow(tab_duplicates > 0)) {
+  } else if (nrow(tab_duplicates) > 0) {
     usethis::ui_oops("New data has duplicated Date/CountyName entries. Dataset not updated.")
   } else if (length(missing_columns) > 0) {
     usethis::ui_oops(paste0(
