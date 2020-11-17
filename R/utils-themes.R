@@ -3,6 +3,10 @@ theme_shiny_dashboard <- function (base_size = 12, base_family = "") {
   default_text_color <- ggplot2::element_text(
     colour = status_para_cor("primary")
   )
+  default_line_color <- ggplot2::element_line(
+    colour = status_para_cor("primary")
+  )
+
   ggplot2::theme(
       axis.text = default_text_color,
       axis.title = default_text_color,
@@ -10,7 +14,11 @@ theme_shiny_dashboard <- function (base_size = 12, base_family = "") {
       axis.title.y = default_text_color,
       plot.title = default_text_color,
       legend.title = default_text_color,
-      legend.text =default_text_color,
+      legend.text = default_text_color,
+      axis.line = default_line_color,
+      panel.grid = ggplot2::element_line(
+        colour = "#bce0e6"
+      ),
       legend.background = ggplot2::element_rect(
         fill = "white"
       ),
