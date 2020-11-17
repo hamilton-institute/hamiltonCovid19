@@ -1,7 +1,7 @@
 Package: hamiltonCovid19
 Title: Hamilton Covid-19 Dashboard
 Version: 0.0.0.9000
-Authors@R: person('R6', 'Hamilton', email = 'consultoria@rseis.com.br', role = c('cre', 'aut'))
+Authors@R: person('Hamilton', 'Institute', email = 'andrew.parnell@mu.ie', role = c('cre', 'aut'))
 Description: Golem package for the Hamilton Covid-19 Dashboard.
 License: MIT + file LICENSE
 Imports: 
@@ -32,9 +32,11 @@ Imports:
     tibble,
     tidyr,
     pkgload,
-    fontawesome
+    fontawesome,
+    hamiltonThemes
 Remotes: 
-    rstudio/fontawesome
+    rstudio/fontawesome,
+    hamilton-institute/hamiltonThemes
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 7.1.1

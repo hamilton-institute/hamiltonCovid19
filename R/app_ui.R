@@ -8,6 +8,7 @@ app_ui <- function(request) {
   tagList(
     # Leave this function for adding external resources
     golem_add_external_resources(),
+    hamiltonThemes::use_bs4Dash_distill_css(),
     # List the first level UI elements here
     bs4Dash::bs4DashPage(
       navbar = create_navbar(),
@@ -82,7 +83,7 @@ create_sidebar <- function() {
 #' Creates app's body
 create_body <- function() {
   bs4Dash::bs4DashBody(
-    fresh::use_theme(theme_bs4Dash_distill()),
+    hamiltonThemes::use_bs4Dash_distill_theme(),
     bs4Dash::bs4TabItems(
       bs4Dash::bs4TabItem(
         tabName = "summary",

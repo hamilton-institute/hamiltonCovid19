@@ -5,7 +5,7 @@
 \alias{global_data}
 \title{ECDC data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 52197 rows and 19 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 56471 rows and 19 columns.
 }
 \source{
 \url{https://opendata.ecdc.europa.eu}
