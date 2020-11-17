@@ -41,7 +41,8 @@ make_leaflet_popup_plots <- function(tab) {
 leaflet_popup_plot <- function(tab, county) {
 
   tab <- tab %>%
-    dplyr::filter(CountyName == county)
+    dplyr::filter(CountyName == county) %>%
+    dplyr::mutate(last14per100k = round(last14per100k))
 
   latest_date <- max(tab$Date)
 

@@ -335,7 +335,7 @@ graphs_tab_plot_ <- function(tab, color_var, variables, x_pick) {
 
   if(x_pick == 'Date') {
     x_scale <- ggplot2::scale_x_date(
-      breaks = '1 week',
+      breaks = '2 weeks',
       labels = scales::label_date("%d%b")
     )
 
