@@ -62,10 +62,28 @@ if (is.null(raw_irish_data)) {
         dplyr::select(
           Date,
           TotalConfirmedCovidCases,
-          TotalCovidDeaths,
-          HospitalisedCovidCases,
-          RequiringICUCovidCases
+          TotalCovidDeaths
         )
+
+      irish_statistic_data <- raw_irish_data %>%
+        dplyr::as_tibble() %>%
+        dplyr::select(
+          Date = StatisticsProfileDate,
+          TotalHospitalisedCovidCases = HospitalisedCovidCases,
+          TotalRequiringICUCovidCases = RequiringICUCovidCases
+        ) %>%
+        dplyr::mutate(dplyr::across(
+          dplyr::starts_with("Total"),
+          ~ifelse(is.na(.x), 0, .x)
+        )) %>%
+        dplyr::transmute(
+          Date = as.Date(Date),
+          DailyHospitalisedCovidCases = c(0, diff(TotalHospitalisedCovidCases)),
+          DailyRequiringICUCovidCases = c(0, diff(TotalRequiringICUCovidCases))
+        )
+
+      irish_data <- irish_data %>%
+        dplyr::left_join(irish_statistic_data, by = "Date")
 
       deploy_app <- TRUE
 

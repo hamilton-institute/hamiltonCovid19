@@ -82,19 +82,19 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
   })
 
   output$ireHospBox <- bs4Dash::renderbs4ValueBox({
-    value_box_counts(
+    value_box_current_vs_max(
       tab = irish_data,
-      variable = HospitalisedCovidCases,
-      title = "Ireland: Hospitalised",
+      variable = DailyHospitalisedCovidCases,
+      var_name = "hospitalised cases",
       icon = "hospital"
     )
   })
 
   output$ireICUBox <- bs4Dash::renderbs4ValueBox({
-    value_box_counts(
+    value_box_current_vs_max(
       tab = irish_data,
-      variable = RequiringICUCovidCases,
-      title = "Ireland: ICU",
+      variable = DailyRequiringICUCovidCases,
+      var_name = "ICU cases",
       icon = "briefcase-medical"
     )
   })
