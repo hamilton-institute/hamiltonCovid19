@@ -35,34 +35,51 @@ value_box_counts <- function(tab, variable, title, icon, status = "success") {
 
 value_box_current_vs_max <- function(tab, variable, var_name, icon, status = "success") {
 
-  tab_latest_data <- tab %>%
+  tab_latest_date <- tab %>%
     dplyr::filter(!is.na({{variable}})) %>%
     dplyr::filter(Date == max(Date))
 
-  latest_update_data <- max(tab$Date)
-  latest_value_data <- max(tab_latest_data$Date)
+  latest_updated_dateTime <- format(
+    max(tab_latest_date$DateTime), "%Y-%m-%d at %H:%M"
+  )
 
   max_value <- tab %>%
     dplyr::pull({{variable}}) %>%
-    max(na.rm = TRUE) %>%
-    format(big.mark = ',')
+    max(na.rm = TRUE)
 
-  latest_val <- tab_latest_data %>%
-    dplyr::pull({{variable}}) %>%
-    format(big.mark = ',')
+  latest_val <- tab_latest_date %>%
+    dplyr::pull({{variable}})
 
-  val <- stringr::str_pad(
-    string = format(latest_val, big.mark = ','),
-    width = 9,
-    side = 'right'
-  )
 
-  value_text <- paste(latest_val, max_value, sep = "/")
+  if (latest_val < max_value) {
+    value_text <- paste0(
+      format(latest_val, big.mark = ','),
+      " (max was ",
+      format(max_value, big.mark = ','),
+      ")"
+    )
+  } else {
+    value_text <- paste0(
+      format(latest_val, big.mark = ','),
+      " (is the new maximum)"
+    )
+  }
 
-  text <- paste0(
-    "Daily ", var_name, " at",
-    br(),
-    latest_value_data, " versus the maximum number"
+  # text <- paste0(
+  #   "Current ", var_name,
+  #   br(),
+  #   " versus the maximum observed number"
+  # )
+
+  previous_val <- tab %>%
+    dplyr::filter(Date == max(Date) - lubridate::days(1)) %>%
+    dplyr::pull({{variable}})
+
+  change <- latest_val - previous_val
+
+  text <- create_value_box_text(
+    title = var_name,
+    change = change
   )
 
   bs4Dash::bs4ValueBox(
@@ -71,7 +88,7 @@ value_box_current_vs_max <- function(tab, variable, var_name, icon, status = "su
     icon = icon,
     status = status,
     width = NULL,
-    footer = create_update_message(latest_update_data)
+    footer = create_update_message(latest_updated_dateTime)
   )
 }
 

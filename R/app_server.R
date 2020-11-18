@@ -10,6 +10,8 @@ app_server <- function(input, output, session) {
 
   global_data <- hamiltonCovid19::global_data
   irish_data <- hamiltonCovid19::irish_data
+  irish_hosp_data <- hamiltonCovid19::irish_hosp_data
+  irish_icu_data <- hamiltonCovid19::irish_icu_data
   irish_county_data <- hamiltonCovid19::irish_county_data
   interventions_data <- hamiltonCovid19::interventions_data
 
@@ -23,6 +25,8 @@ app_server <- function(input, output, session) {
     mod_summary_ireland_server,
     "summary_ireland_ui_1",
     irish_data,
+    irish_hosp_data,
+    irish_icu_data,
     irish_county_data
   )
 
