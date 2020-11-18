@@ -10,6 +10,12 @@ source("data-raw/global_data.R")
 # Update irish_data
 source("data-raw/irish_data.R")
 
+# Update irish hospitalization data
+source("data-raw/irish_hosp_data.R")
+
+# Update irish ICU data
+source("data-raw/irish_icu_data.R")
+
 # Update irish_county_data
 source("data-raw/irish_county_data.R")
 
