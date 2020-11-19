@@ -68,7 +68,7 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
     value_box_counts(
       tab = irish_data,
       variable = TotalConfirmedCovidCases,
-      title = "Total number of cases",
+      title = "cases",
       icon = "thermometer-three-quarters"
     )
   })
@@ -77,7 +77,7 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
     value_box_counts(
       tab = irish_data,
       variable = TotalCovidDeaths,
-      title = "Total number of deaths",
+      title = "deaths",
       icon = "exclamation-triangle"
     )
   })
@@ -86,7 +86,7 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
     value_box_current_vs_max(
       tab = irish_hosp_data,
       variable = currentHospitalisedCases,
-      var_name = "Current hospitalised cases",
+      var_name = "hospitalised",
       icon = "hospital"
     )
   })
@@ -95,7 +95,7 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
     value_box_current_vs_max(
       tab = irish_icu_data,
       variable = currentICUCases,
-      var_name = "Current ICU cases",
+      var_name = "in ICU",
       icon = "briefcase-medical"
     )
   })

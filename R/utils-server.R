@@ -12,19 +12,21 @@ value_box_counts <- function(tab, variable, title, icon, status = "success") {
 
   change <- latest_val - previous_val
 
-  val <- stringr::str_pad(
-    string = format(latest_val, big.mark = ','),
-    width = 9,
-    side = 'right'
-  )
+  # val <- stringr::str_pad(
+  #   string = format(latest_val, big.mark = ','),
+  #   width = 9,
+  #   side = 'right'
+  # )
+
+  val_text <- paste(format(latest_val, big.mark = ','), title)
 
   text <- create_value_box_text(
-    title = title,
+    title = paste0("Total number of ", title),
     change = change
   )
 
   bs4Dash::bs4ValueBox(
-    value = tags$p(val, style = "font-size: 2vmax; margin-bottom: 0;"),
+    value = tags$p(val_text, style = "font-size: 2vmax; margin-bottom: 0;"),
     subtitle = tags$p(HTML(text)),
     icon = icon,
     status = status,
@@ -43,33 +45,34 @@ value_box_current_vs_max <- function(tab, variable, var_name, icon, status = "su
     max(tab_latest_date$DateTime), "%Y-%m-%d at %H:%M"
   )
 
-  max_value <- tab %>%
-    dplyr::pull({{variable}}) %>%
-    max(na.rm = TRUE)
+  tab_max <- tab %>%
+    dplyr::filter({{variable}} == max({{variable}})) %>%
+    dplyr::slice_max(n = 1, order_by = Date)
+
+  max_value <- tab_max %>%
+    dplyr::pull({{variable}})
+
+  max_date <- format(tab_max$Date, "%B %d, %Y")
 
   latest_val <- tab_latest_date %>%
     dplyr::pull({{variable}})
 
+  val_text <- paste(format(latest_val, big.mark = ','), var_name)
+
 
   if (latest_val < max_value) {
-    value_text <- paste0(
-      format(latest_val, big.mark = ','),
-      " (max was ",
+    max_text <- paste0(
+      "Max was ",
       format(max_value, big.mark = ','),
-      ")"
+      " on ",
+      max_date
     )
   } else {
-    value_text <- paste0(
+    max_text <- paste0(
       format(latest_val, big.mark = ','),
-      " (is the new maximum)"
+      " is the new maximum"
     )
   }
-
-  # text <- paste0(
-  #   "Current ", var_name,
-  #   br(),
-  #   " versus the maximum observed number"
-  # )
 
   previous_val <- tab %>%
     dplyr::filter(Date == max(Date) - lubridate::days(1)) %>%
@@ -78,12 +81,12 @@ value_box_current_vs_max <- function(tab, variable, var_name, icon, status = "su
   change <- latest_val - previous_val
 
   text <- create_value_box_text(
-    title = var_name,
+    title = max_text,
     change = change
   )
 
   bs4Dash::bs4ValueBox(
-    value = tags$p(value_text, style = "font-size: 2vmax; margin-bottom: 0;"),
+    value = tags$p(val_text, style = "font-size: 2vmax; margin-bottom: 0;"),
     subtitle = tags$p(HTML(text)),
     icon = icon,
     status = status,

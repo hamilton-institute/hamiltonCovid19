@@ -95,7 +95,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
       dplyr::filter(countriesAndTerritories == "Global") %>%
       value_box_counts(
         variable = totalCases,
-        title = "Total number of cases",
+        title = "cases",
         icon = "globe",
         status = "success"
       )
@@ -106,7 +106,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
       dplyr::filter(countriesAndTerritories == "Global") %>%
       value_box_counts(
         variable = totalDeaths,
-        title = "Total number of deaths",
+        title = "deaths",
         icon = "cross",
         status = "success"
       )
