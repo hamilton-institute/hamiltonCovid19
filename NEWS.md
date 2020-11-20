@@ -1,5 +1,18 @@
 # hamiltonCovid19 0.0.0.9000
 
+#### 2020-11-19
+* Added date of the maximum for hospitalised and ICU cases.
+
+#### 2020-11-18
+* Added irish_hosp_data and irish_icu_data (also scrape and update code).
+* Changed values of Ireland Hospitalised and ICU cases at Summary tab to the current values (instead of the total number).
+
+#### 2020-11-17
+* Animation tab plot now starts always 30 days before the current date.
+* Added back in grid lines on all plots.
+* Rounded values in Map tab leaflet plots.
+* Fixing problem with SQRT and Log variables at animation tab.
+
 #### 2020-11-03
 * Added tests for global_data, irish_data and irish_country_data update workflow.
 

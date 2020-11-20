@@ -2,35 +2,11 @@ ani_graph <- function(tab, ctry, x_pick, y_pick, date) {
 
   global_agg <- tab %>%
     dplyr::filter(countriesAndTerritories %in% ctry) %>%
-    dplyr::select(
-      Date,
-      cases,
-      deaths,
-      countriesAndTerritories,
-      popData2019
-    ) %>%
-    dplyr::group_by(countriesAndTerritories) %>%
-    dplyr::arrange(Date) %>%
     dplyr::mutate(
-      cum_cases = cumsum(cases),
-      cum_deaths = cumsum(deaths),
-      daily_cases = cases,
-      daily_deaths = deaths,
-      cases_per_million = 1e6 * cumsum(cases) / popData2019,
-      deaths_per_million = 1e6 * cumsum(deaths) / popData2019
-    ) %>%
-    dplyr::ungroup() %>%
-    dplyr::mutate(
-      dplyr::across(
-        c("daily_cases", "daily_deaths", "cum_cases", "cum_deaths"),
-        ~ .x + 1,
-        .names = "log_{col}"
-      ),
-      dplyr::across(
-        c("daily_cases", "daily_deaths", "cum_cases", "cum_deaths"),
-        ~ .x,
-        .names = "sqrt_{col}"
-      )
+      sqrtCases = suppressWarnings(sqrt(cases)),
+      sqrtDeaths = suppressWarnings(sqrt(deaths)),
+      sqrtTotalCases = suppressWarnings(sqrt(totalCases)),
+      sqrtTotalDeaths = suppressWarnings(sqrt(totalDeaths))
     )
 
   validate(
@@ -91,46 +67,56 @@ ani_graph <- function(tab, ctry, x_pick, y_pick, date) {
       y = get_variable_name(y_pick, get_anim_variables())
     ) +
     ggplot2::scale_size(range = c(2, 12)) +
-    { if (stringr::str_detect(x_pick, 'sqrt')) {
-      ggplot2::scale_x_sqrt(
-        breaks = scales::breaks_pretty(n = 7),
-        labels = scales::comma,
-        limits = c(min(global_agg[[x_pick]]), max(global_agg[[x_pick]]))
-      )
-    } else if(stringr::str_detect(x_pick, 'log')) {
-      ggplot2::scale_x_continuous(
-        trans = scales::log1p_trans(),
-        labels = scales::comma,
-        breaks = scales::breaks_log(n = 7),
-        limits = c(min(global_agg[[x_pick]]), max(global_agg[[x_pick]]))
-      )
-    } else {
-      ggplot2::scale_x_continuous(
-        labels = scales::comma,
-        breaks = scales::breaks_pretty(n = 7),
-        limits = c(min(global_agg[[x_pick]]), max(global_agg[[x_pick]]))
-      )
-    }} +
-    { if (stringr::str_detect(y_pick, 'sqrt')) {
-      ggplot2::scale_y_sqrt(
-        labels = scales::comma,
-        breaks = scales::breaks_pretty(n = 7),
-        limits = c(min(global_agg[[y_pick]]), max(global_agg[[y_pick]]))
-      )
-    } else if(stringr::str_detect(y_pick,'log')) {
-      ggplot2::scale_y_continuous(
-        labels = scales::comma,
-        trans = scales::log1p_trans(),
-        breaks = scales::breaks_log(n = 7),
-        limits = c(min(global_agg[[y_pick]]), max(global_agg[[y_pick]]))
-      )
-    } else {
-      ggplot2::scale_y_continuous(
-        labels = scales::comma,
-        breaks = scales::breaks_pretty(n = 7),
-        limits = c(min(global_agg[[y_pick]]), max(global_agg[[y_pick]]))
-      )
-    }} +
+    ggplot2::scale_x_continuous(
+      breaks = scales::breaks_pretty(n = 7),
+      limits = c(min(global_agg[[x_pick]]), max(global_agg[[x_pick]])),
+      labels = scales::comma
+    ) +
+    ggplot2::scale_y_continuous(
+      breaks = scales::breaks_pretty(n = 7),
+      limits = c(min(global_agg[[y_pick]]), max(global_agg[[y_pick]])),
+      labels = scales::comma,
+    ) +
+    # { if (stringr::str_detect(x_pick, 'sqrt')) {
+    #   ggplot2::scale_x_sqrt(
+    #     breaks = scales::breaks_pretty(n = 7),
+    #     labels = scales::comma,
+    #     limits = c(min(global_agg[[x_pick]]), max(global_agg[[x_pick]]))
+    #   )
+    # } else if(stringr::str_detect(x_pick, 'log')) {
+    #   ggplot2::scale_x_continuous(
+    #     trans = scales::log1p_trans(),
+    #     labels = scales::comma,
+    #     breaks = scales::breaks_log(n = 7),
+    #     limits = c(min(global_agg[[x_pick]]), max(global_agg[[x_pick]]))
+    #   )
+    # } else {
+    #   ggplot2::scale_x_continuous(
+    #     labels = scales::comma,
+    #     breaks = scales::breaks_pretty(n = 7),
+    #     limits = c(min(global_agg[[x_pick]]), max(global_agg[[x_pick]]))
+    #   )
+    # }} +
+    # { if (stringr::str_detect(y_pick, 'sqrt')) {
+    #   ggplot2::scale_y_sqrt(
+    #     labels = scales::comma,
+    #     breaks = scales::breaks_pretty(n = 7),
+    #     limits = c(min(global_agg[[y_pick]]), max(global_agg[[y_pick]]))
+    #   )
+    # } else if(stringr::str_detect(y_pick,'log')) {
+    #   ggplot2::scale_y_continuous(
+    #     labels = scales::comma,
+    #     trans = scales::log1p_trans(),
+    #     breaks = scales::breaks_log(n = 7),
+    #     limits = c(min(global_agg[[y_pick]]), max(global_agg[[y_pick]]))
+    #   )
+    # } else {
+    #   ggplot2::scale_y_continuous(
+    #     labels = scales::comma,
+    #     breaks = scales::breaks_pretty(n = 7),
+    #     limits = c(min(global_agg[[y_pick]]), max(global_agg[[y_pick]]))
+    #   )
+    # }} +
     theme_shiny_dashboard() +
     ggplot2::theme(
       legend.position = 'None',

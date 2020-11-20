@@ -1,8 +1,8 @@
 create_value_box_text <- function(title, change) {
   paste0(
-    title,
+    create_change_message(change),
     br(),
-    create_change_message(change)
+    title
   )
 }
 

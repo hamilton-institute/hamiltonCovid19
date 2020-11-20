@@ -59,6 +59,7 @@ mod_summary_ireland_ui <- function(id) {
 #'
 #' @noRd
 mod_summary_ireland_server <- function(input, output, session, irish_data,
+                                       irish_hosp_data, irish_icu_data,
                                        irish_county_data) {
 
   ns <- session$ns
@@ -67,7 +68,7 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
     value_box_counts(
       tab = irish_data,
       variable = TotalConfirmedCovidCases,
-      title = "Ireland: Diagnoses",
+      title = "cases",
       icon = "thermometer-three-quarters"
     )
   })
@@ -76,25 +77,25 @@ mod_summary_ireland_server <- function(input, output, session, irish_data,
     value_box_counts(
       tab = irish_data,
       variable = TotalCovidDeaths,
-      title = "Ireland: Deaths",
+      title = "deaths",
       icon = "exclamation-triangle"
     )
   })
 
   output$ireHospBox <- bs4Dash::renderbs4ValueBox({
-    value_box_counts(
-      tab = irish_data,
-      variable = HospitalisedCovidCases,
-      title = "Ireland: Hospitalised",
+    value_box_current_vs_max(
+      tab = irish_hosp_data,
+      variable = currentHospitalisedCases,
+      var_name = "hospitalised",
       icon = "hospital"
     )
   })
 
   output$ireICUBox <- bs4Dash::renderbs4ValueBox({
-    value_box_counts(
-      tab = irish_data,
-      variable = RequiringICUCovidCases,
-      title = "Ireland: ICU",
+    value_box_current_vs_max(
+      tab = irish_icu_data,
+      variable = currentICUCases,
+      var_name = "in ICU",
       icon = "briefcase-medical"
     )
   })

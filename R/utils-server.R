@@ -12,24 +12,86 @@ value_box_counts <- function(tab, variable, title, icon, status = "success") {
 
   change <- latest_val - previous_val
 
-  val <- stringr::str_pad(
-    string = format(latest_val, big.mark = ','),
-    width = 9,
-    side = 'right'
-  )
+  # val <- stringr::str_pad(
+  #   string = format(latest_val, big.mark = ','),
+  #   width = 9,
+  #   side = 'right'
+  # )
+
+  val_text <- paste(format(latest_val, big.mark = ','), title)
 
   text <- create_value_box_text(
-    title = title,
+    title = paste0("Total number of ", title),
     change = change
   )
 
   bs4Dash::bs4ValueBox(
-    value = tags$p(val, style = "font-size: 2vmax; margin-bottom: 0;"),
+    value = tags$p(val_text, style = "font-size: 2vmax; margin-bottom: 0;"),
     subtitle = tags$p(HTML(text)),
     icon = icon,
     status = status,
     width = NULL,
     footer = create_update_message(tab_latest_data$Date)
+  )
+}
+
+value_box_current_vs_max <- function(tab, variable, var_name, icon, status = "success") {
+
+  tab_latest_date <- tab %>%
+    dplyr::filter(!is.na({{variable}})) %>%
+    dplyr::filter(Date == max(Date))
+
+  latest_updated_dateTime <- format(
+    max(tab_latest_date$DateTime), "%Y-%m-%d at %H:%M"
+  )
+
+  tab_max <- tab %>%
+    dplyr::filter({{variable}} == max({{variable}})) %>%
+    dplyr::slice_max(n = 1, order_by = Date)
+
+  max_value <- tab_max %>%
+    dplyr::pull({{variable}})
+
+  max_date <- format(tab_max$Date, "%B %d, %Y")
+
+  latest_val <- tab_latest_date %>%
+    dplyr::pull({{variable}})
+
+  val_text <- paste(format(latest_val, big.mark = ','), var_name)
+
+
+  if (latest_val < max_value) {
+    max_text <- paste0(
+      "Max was ",
+      format(max_value, big.mark = ','),
+      " on ",
+      max_date
+    )
+  } else {
+    max_text <- paste0(
+      format(latest_val, big.mark = ','),
+      " is the new maximum"
+    )
+  }
+
+  previous_val <- tab %>%
+    dplyr::filter(Date == max(Date) - lubridate::days(1)) %>%
+    dplyr::pull({{variable}})
+
+  change <- latest_val - previous_val
+
+  text <- create_value_box_text(
+    title = max_text,
+    change = change
+  )
+
+  bs4Dash::bs4ValueBox(
+    value = tags$p(val_text, style = "font-size: 2vmax; margin-bottom: 0;"),
+    subtitle = tags$p(HTML(text)),
+    icon = icon,
+    status = status,
+    width = NULL,
+    footer = create_update_message(latest_updated_dateTime)
   )
 }
 
