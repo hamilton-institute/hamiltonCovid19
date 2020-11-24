@@ -1,5 +1,9 @@
 # hamiltonCovid19 0.0.0.9000
 
+#### 2020-11-24
+* Added Ireland's COVID-19 Data Hub entry in Sources tab
+* Added automatic update workflow to Intervation data 
+
 #### 2020-11-19
 * Added date of the maximum for hospitalised and ICU cases.
 

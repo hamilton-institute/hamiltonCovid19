@@ -18,9 +18,9 @@ mod_sources_ui <- function(id){
         title = "ECDC"
       ),
       sources_item(
-        link = "https://www.gov.ie/en/news/7e0924-latest-updates-on-covid-19-coronavirus/",
-        icon = "university",
-        title = "Irish government data"
+        link = "https://covid-19.geohive.ie/",
+        icon = "hubspot",
+        title = "Ireland's COVID-19 Data Hub"
       ),
       sources_item(
         link = "https://www.publichealth.hscni.net/publications/covid-19-surveillance-reports",

@@ -20,7 +20,7 @@ source("data-raw/irish_icu_data.R")
 source("data-raw/irish_county_data.R")
 
 # Update interventions_data
-# source("data-raw/interventions_data.R")
+source("data-raw/interventions_data.R")
 
 if (deploy_app) {
 
