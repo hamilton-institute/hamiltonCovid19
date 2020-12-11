@@ -32,7 +32,9 @@ Imports:
     tibble,
     tidyr,
     pkgload,
-    fontawesome
+    fontawesome,
+    RCurl,
+    jsonlite
 Remotes: 
     rstudio/fontawesome
 Encoding: UTF-8
