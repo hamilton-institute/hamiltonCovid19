@@ -17,7 +17,7 @@ jobs:
       - uses: r-lib/actions/setup-r@master
       - name: Install packages
         run: |
-          Rscript -e "install.packages(c('rsconnect', 'remotes', 'tidyverse', 'RCurl', 'usethis', 'sf', 'RcppRoll', 'janitor', 'jsonlite', type = 'binary')"
+          Rscript -e "install.packages(c('rsconnect', 'remotes', 'tidyverse', 'RCurl', 'usethis', 'sf', 'RcppRoll', 'janitor', 'jsonlite'), type = 'binary')"
       - name: Update datasets and deploy (if needed)
         run: |
           Rscript data-raw/update_data.R ${{secrets.SHINYAPPS_TOKEN}} ${{secrets.SHINYAPPS_SECRET}}
