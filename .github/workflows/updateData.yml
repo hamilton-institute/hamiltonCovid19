@@ -16,7 +16,7 @@ jobs:
       - uses: actions/checkout@v2
       - name: Install libs
         run: |
-          sudo apt-get install libgit2-dev
+          brew install libgit2
       - uses: r-lib/actions/setup-r@master
       - name: Install packages
         run: |
