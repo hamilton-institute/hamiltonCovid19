@@ -7,16 +7,17 @@ name: updateData
 on:
   schedule:
   - cron: "0 0-23 * * *"
+  workflow_dispatch:
 
 jobs:
   deploy:
     name: Update datasets
-    runs-on: macOS-latest
+    runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v2
       - name: Install libs
         run: |
-          brew install libgit2
+          apt install libgit2-dev
       - uses: r-lib/actions/setup-r@master
       - name: Install packages
         run: |
