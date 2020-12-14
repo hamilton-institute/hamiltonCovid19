@@ -21,8 +21,9 @@ jobs:
           sudo apt install libudunits2-dev libgdal-dev
       - uses: r-lib/actions/setup-r@master
       - run: |
-          sudo apt update
-          sudo apt install libgit2-dev
+          sudo add-apt-repository ppa:cran/libgit2
+          sudo apt-get update
+          sudo apt-get install libgit2-dev
       - name: Install packages
         run: |
           Rscript -e "install.packages(c('units', 'sf'))"
