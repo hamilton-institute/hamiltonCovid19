@@ -18,7 +18,7 @@ jobs:
       - name: Install libs
         run: |
           sudo apt update
-          sudo apt install libgit2-dev libudunits2-dev
+          sudo apt install libgit2-dev libudunits2-dev libgdal-dev
       - uses: r-lib/actions/setup-r@master
       - name: Install packages
         run: |
