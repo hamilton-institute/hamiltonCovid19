@@ -28,7 +28,7 @@ jobs:
         run: |
           Rscript -e "install.packages(c('units', 'sf'))"
           Rscript -e "install.packages(c('rsconnect', 'remotes', 'tidyverse', 'RCurl', 'RcppRoll', 'janitor', 'jsonlite'))"
-          Rscript -e "install.packages("https://cran.r-project.org/src/contrib/Archive/usethis/usethis_1.6.0.tar.gz", repos=NULL, type="source")"
+          Rscript -e "install.packages('https://cran.r-project.org/src/contrib/Archive/usethis/usethis_1.6.0.tar.gz', repos=NULL, type='source')"
       - name: Update datasets and deploy (if needed)
         run: |
           Rscript data-raw/update_data.R ${{secrets.SHINYAPPS_TOKEN}} ${{secrets.SHINYAPPS_SECRET}}
