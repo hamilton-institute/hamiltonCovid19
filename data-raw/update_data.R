@@ -24,7 +24,11 @@ source("data-raw/interventions_data.R")
 
 if (deploy_app) {
 
-  remotes::install_deps(dependencies = TRUE)
+  remotes::install_deps(
+    dependencies = TRUE,
+    upgrade = "never",
+    repos = "https://packagemanager.rstudio.com/all/__linux__/bionic/latest"
+  )
 
   rsconnect::setAccountInfo(
     name = 'apmuhamilton',
