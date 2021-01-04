@@ -5,7 +5,7 @@ args <- commandArgs(trailingOnly = TRUE)
 deploy_app <- FALSE
 
 # Update global_data
-source("data-raw/global_data.R")
+source("data-raw/global_data_JH.R")
 
 # Update irish_data
 source("data-raw/irish_data.R")

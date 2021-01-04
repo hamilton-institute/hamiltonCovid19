@@ -2,7 +2,7 @@ summaryTab_table <- function(tab) {
 
   col_spec <- purrr::map2(
     c("left", "left", "center"),
-    c(100, 80, 80),
+    c(75, 78, 75),
     ~ reactable::colDef(align = .x, minWidth = .y, maxWidth = 200)
   )
 
@@ -21,7 +21,8 @@ summaryTab_table <- function(tab) {
     defaultColDef = reactable::colDef(
       align = "left",
       format = reactable::colFormat(separators = TRUE),
-      maxWidth = 40
+      maxWidth = 40,
+      style = "font-size: 11px;"
     ),
     columns = col_spec
   )
