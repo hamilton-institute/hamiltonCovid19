@@ -9,7 +9,7 @@
 #' @importFrom shiny NS tagList
 mod_summary_global_ui <- function(id){
   ns <- NS(id)
-  table_box_height <- "540px"
+  table_box_height <- "630px"
   tagList(
     fluidRow(
       col_12(
