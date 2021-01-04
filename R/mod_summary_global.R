@@ -165,7 +165,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
     highest14Day <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        continentExp == "Europe",
+        continentExp == "Europe & Central Asia",
         popData2019 > 1e6
       ) %>%
       dplyr::slice_max(last14per100k, n = 1)
@@ -173,7 +173,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
     value_box_countries(
       tab = highest14Day,
       variable = last14per100k,
-      title = "Highest 14-day cases per 100k in Europe: ",
+      title = "Highest 14-day cases per 100k in Europe & Central Asia: ",
       icon = "arrow-up"
     )
 

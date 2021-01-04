@@ -1,35 +1,35 @@
 ## Update global_data dataset
+## On Dec 14, 2020, the ECDC data became weekly instead of daily. So
+# we started to use the Jonhs Hopkins data, in the global_data_JH.R file.
 
 usethis::ui_todo("Checking update for global_data dataset...")
 
 `%>%` <- magrittr::`%>%`
 
-url_ecdc <- "https://opendata.ecdc.europa.eu/covid19/casedistribution/csv"
+remotes::install_github("joachim-gassen/tidycovid19", upgrade = "never")
 
-raw_global_data <- tryCatch(
-  read.csv(url_ecdc, na.strings = "", fileEncoding = "UTF-8-BOM"),
-  error = function(x) NULL
+raw_global_data <- tidycovid19::download_merged_data(
+  cached = TRUE,
+  silent = TRUE
 )
 
 if (is.null(raw_global_data)) {
-  message(paste0("Failed to download a CSV file from ", url_ecdc))
+  message("Failed to download the data using the tidycovid19 package.")
 } else {
   # Testing new dataset
-  old_global_data <- readr::read_rds("data-raw/rds/raw_global_data.rds")
+  old_global_data <- readr::read_rds("data-raw/rds/raw_global_data_JH.rds")
 
   tab_duplicates <- raw_global_data %>%
-    dplyr::count(dateRep, countriesAndTerritories) %>%
+    dplyr::count(date, country) %>%
     dplyr::filter(n > 1)
 
   needed_columns <- c(
-    "dateRep",
-    "countriesAndTerritories",
-    "cases",
+    "date",
+    "country",
+    "confirmed",
     "deaths",
-    "geoId",
-    "countryterritoryCode",
-    "popData2019",
-    "continentExp"
+    "population",
+    "region"
   )
 
   missing_columns <- needed_columns[
@@ -52,37 +52,26 @@ if (is.null(raw_global_data)) {
     suppressMessages({
       readr::write_rds(
         raw_global_data,
-        "data-raw/rds/raw_global_data.rds",
+        "data-raw/rds/raw_global_data_JH.rds",
         compress = "xz"
       )
 
       global_data <- raw_global_data %>%
         dplyr::as_tibble() %>%
-        dplyr::mutate(Date = as.Date(dateRep, tryFormats = "%d/%m/%Y")) %>%
+        dplyr::mutate(Date = as.Date(date, tryFormats = "%d/%m/%Y")) %>%
         dplyr::select(
           Date,
-          countriesAndTerritories,
-          cases,
-          deaths,
-          geoId,
-          countryterritoryCode,
-          popData2019,
-          continentExp
-        )
-
-      global_data <- global_data %>%
+          countriesAndTerritories = country,
+          totalCases = confirmed,
+          totalDeaths = deaths,
+          popData2019 = population,
+          continentExp = region
+        ) %>%
         dplyr::mutate(
           countriesAndTerritories = dplyr::case_when(
-            countriesAndTerritories == 'Cases_on_an_international_conveyance_Japan' ~
-              'Cruise_ship',
-            countriesAndTerritories == 'United_States_of_America' ~ 'USA',
-            countriesAndTerritories == 'United_Kingdom' ~ 'UK',
+            countriesAndTerritories == 'United States' ~ 'USA',
+            countriesAndTerritories == 'United Kingdom' ~ 'UK',
             TRUE ~ countriesAndTerritories
-          ),
-          countriesAndTerritories = stringr::str_replace_all(
-            string = countriesAndTerritories,
-            pattern = "_",
-            replacement = " "
           )
         )
 
@@ -90,7 +79,7 @@ if (is.null(raw_global_data)) {
         dplyr::mutate(popData2019 = as.numeric(popData2019)) %>%
         dplyr::group_by(Date) %>%
         dplyr::summarise(
-          dplyr::across(c("deaths", "cases", "popData2019"), sum, na.rm = TRUE),
+          dplyr::across(c("totalCases", "totalDeaths", "popData2019"), sum, na.rm = TRUE),
           .groups = "drop"
         ) %>%
         dplyr::mutate(countriesAndTerritories = 'Global')
@@ -101,10 +90,10 @@ if (is.null(raw_global_data)) {
         dplyr::group_by(countriesAndTerritories) %>%
         dplyr::arrange(Date, .by_group = TRUE) %>%
         dplyr::mutate(
-          changeCases = cases - lag(cases),
-          changeDeaths = deaths - lag(deaths),
-          totalCases = cumsum(cases),
-          totalDeaths = cumsum(deaths),
+          cases = totalCases - dplyr::lag(totalCases),
+          deaths = totalDeaths - dplyr::lag(totalDeaths),
+          changeCases = cases - dplyr::lag(cases),
+          changeDeaths = deaths - dplyr::lag(deaths),
           logp1Cases = suppressWarnings(log(cases + 1)),
           logp1Deaths = suppressWarnings(log(deaths + 1)),
           logp1TotalCases = log(totalCases + 1),

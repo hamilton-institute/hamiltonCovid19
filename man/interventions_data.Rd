@@ -5,7 +5,7 @@
 \alias{interventions_data}
 \title{Countryinterventions data}
 \format{
-An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 19493 rows and 18 columns.
+An object of class \code{tbl_df} (inherits from \code{tbl}, \code{data.frame}) with 23923 rows and 11 columns.
 }
 \source{
 \url{https://data.humdata.org/}
