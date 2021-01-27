@@ -58,7 +58,7 @@ if (is.null(raw_interventions_data)) {
   ]
 
   if (identical(raw_interventions_data, old_interventions_data)) {
-    usethis::ui_done("Nothing to update in global_data.")
+    usethis::ui_done("Nothing to update in interventions_data")
   } else if (nrow(tab_duplicates) > 0) {
     usethis::ui_oops("New data has duplicated entries. Dataset not updated.")
   } else if (length(missing_columns) > 0) {
