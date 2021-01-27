@@ -6,7 +6,7 @@ usethis::ui_todo("Checking update for global_data dataset...")
 
 `%>%` <- magrittr::`%>%`
 
-remotes::install_github("joachim-gassen/tidycovid19", upgrade = "never")
+remotes::install_github("joachim-gassen/tidycovid19", upgrade = "never", quiet = TRUE)
 
 raw_global_data <- tidycovid19::download_merged_data(
   cached = TRUE,
