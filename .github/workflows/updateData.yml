@@ -20,6 +20,8 @@ jobs:
           sudo apt update
           sudo apt install libudunits2-dev libgdal-dev
       - uses: r-lib/actions/setup-r@master
+        with:
+          r-version: '4.0.3'
       - run: |
           sudo add-apt-repository ppa:cran/libgit2
           sudo apt-get update
