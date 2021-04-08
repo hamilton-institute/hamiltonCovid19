@@ -94,7 +94,8 @@ mod_animations_server <- function(input, output, session, global_data) {
       "Date (click play or move slider)",
       min = min_date(),
       max = max(global_data$Date),
-      value = max(global_data$Date) - months(1),
+      #value = max(global_data$Date) - months(1),
+      value = max(global_data$Date),
       width = "75%",
       timeFormat = "%d/%b",
       animate = animationOptions(interval = 1000, loop = FALSE)
