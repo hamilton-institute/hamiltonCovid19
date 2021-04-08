@@ -2,7 +2,7 @@
 
 args <- commandArgs(trailingOnly = TRUE)
 
-deploy_app <- FALSE
+deploy_app <- TRUE
 
 # Update global_data
 source("data-raw/global_data_JH.R")
