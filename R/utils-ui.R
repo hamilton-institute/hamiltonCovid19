@@ -153,7 +153,7 @@ get_graph_variables <- function() {
     'Deaths per million population' = 'deathsPerMillion',
     'Total vaccination doses' = 'totalVaccinations',
     'Total vaccination doses per 100k population' = 'vaccinationsPer100k',
-    'Total vaccination doses percentage' = 'vaccinationsPc'
+    "Vaccination doses % of population" = "vaccinationsPc"
   )
 }
 
@@ -176,19 +176,24 @@ get_anim_variables <- function() {
     'Cumulative deaths per million population' = 'deathsPerMillion',
     'Total vaccination doses' = 'totalVaccinations',
     'Total vaccination doses per 100k population' = 'vaccinationsPer100k',
-    'Total vaccination doses percentage' = 'vaccinationsPc'
+    "Vaccination doses % of population" = "vaccinationsPc"
   )
 }
 
 get_summary_variables <- function() {
   c(
-    "14-days cases per 100k residents" = "last14per100k",
+    "14-days cases per 100k population" = "last14per100k",
+    "14-days deaths per 100k population" = "last14deathsper100k",
     'Daily cases' = "cases",
     "Total cases" = "totalCases",
     "Cases increased since yesterday" = "changeCases",
     "Deaths increased since yesterday" = "changeDeaths",
-    "Vaccination doses %" = "vaccinationsPc",
+    "Vaccination doses % of population" = "vaccinationsPc",
     "Total vaccination doses" = "totalVaccinations"
+    # "Hospitalisations" = "hospPatients",
+    # "ICU admissions" = "icuPatients",
+    # "Hospitalisations per 100k population" = "hospPer100k",
+    # "ICU admissions per 100k population" = "icuPer100k"
   )
 }
 

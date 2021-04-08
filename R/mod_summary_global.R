@@ -240,7 +240,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
   })
 
   output$customTable <- reactable::renderReactable({
-    if (input$selVariable %in% c("cases", "totalCases")) {
+    if (input$selVariable %in% c("cases", "totalCases","totalVaccinations")) {
       latest_global_data() %>%
         dplyr::filter(countriesAndTerritories != "Global") %>%
         dplyr::arrange(desc(.data[[input$selVariable]])) %>%
@@ -265,7 +265,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
           ) %>%
           summaryTab_table()
 
-      } else if (input$selVariable %in% c("last14per100k","vaccinationsPc","totalVaccinations")) {
+      } else if (input$selVariable %in% c("last14per100k","vaccinationsPc")) {
         latest_global_data() %>%
           dplyr::filter(
             countriesAndTerritories != "Global",

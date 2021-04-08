@@ -30,7 +30,10 @@ if (is.null(raw_global_data)) {
     "deaths",
     "population",
     "region",
-    "total_vaccinations"
+    "total_vaccinations",
+    "positive_rate",
+    "hosp_patients",
+    "icu_patients"
   )
 
   missing_columns <- needed_columns[
@@ -68,7 +71,10 @@ if (is.null(raw_global_data)) {
           totalDeaths = deaths,
           popData2019 = population,
           continentExp = region,
-          totalVaccinations = total_vaccinations
+          totalVaccinations = total_vaccinations,
+          positiveRate = positive_rate,
+          hospPatients = hosp_patients,
+          icuPatients = icu_patients
         ) %>%
         dplyr::mutate(
           countriesAndTerritories = dplyr::case_when(
@@ -119,7 +125,9 @@ if (is.null(raw_global_data)) {
           ),
           last14deathsper100k = 1e5 * last14deathsper100k / popData2019,
           vaccinationsPer100k = 1e5 * totalVaccinations / (2 * popData2019),
-          vaccinationsPc = 100 * totalVaccinations / (2 * popData2019)
+          vaccinationsPc = 100 * totalVaccinations / (2 * popData2019),
+          hospPer100k = 1e5 * hospPatients / popData2019,
+          icuPer100k = 1e5 * icuPatients / popData2019,
         ) %>%
         dplyr::ungroup()
 
