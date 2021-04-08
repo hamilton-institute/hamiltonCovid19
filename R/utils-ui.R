@@ -131,13 +131,16 @@ get_inter_variables <- function() {
     'Log cumulative cases' = 'logp1TotalCases',
     'Log cumulative deaths' = 'logp1TotalDeaths',
     'Cases per million population' = 'casesPerMillion',
-    'Deaths per million population' = 'deathsPerMillion'
+    'Deaths per million population' = 'deathsPerMillion',
+    'Total vaccination doses' = 'totalVaccinations',
+    'Total vaccination doses per 100k population' = 'vaccinationsPer100k',
+    'Total vaccination doses percentage' = 'vaccinationsPc'
   )
 }
 
 get_graph_variables <- function() {
   c(
-    "14-days cases per 100k residents" = "last14per100k",
+    "14-days cases per 100k population" = "last14per100k",
     'Cumulative cases' = 'totalCases',
     'Cumulative deaths' = 'totalDeaths',
     'Daily cases' = 'cases',
@@ -147,12 +150,16 @@ get_graph_variables <- function() {
     'Logp1 daily cases' = 'logp1Cases',
     'Logp1 daily deaths' = 'logp1Deaths',
     'Cases per million population' = 'casesPerMillion',
-    'Deaths per million population' = 'deathsPerMillion'
+    'Deaths per million population' = 'deathsPerMillion',
+    'Total vaccination doses' = 'totalVaccinations',
+    'Total vaccination doses per 100k population' = 'vaccinationsPer100k',
+    'Total vaccination doses percentage' = 'vaccinationsPc'
   )
 }
 
 get_anim_variables <- function() {
   c(
+    'Date' = 'Date',
     'Cumulative cases' = 'totalCases',
     'Cumulative deaths' = 'totalDeaths',
     'Daily cases' = 'cases',
@@ -166,7 +173,10 @@ get_anim_variables <- function() {
     'Logp1 cumulative cases' = 'logp1TotalCases',
     'Logp1 cumulative deaths' = 'logp1TotalDeaths',
     'Cumulative cases per million population' = 'casesPerMillion',
-    'Cumulative deaths per million population' = 'deathsPerMillion'
+    'Cumulative deaths per million population' = 'deathsPerMillion',
+    'Total vaccination doses' = 'totalVaccinations',
+    'Total vaccination doses per 100k population' = 'vaccinationsPer100k',
+    'Total vaccination doses percentage' = 'vaccinationsPc'
   )
 }
 
@@ -176,7 +186,9 @@ get_summary_variables <- function() {
     'Daily cases' = "cases",
     "Total cases" = "totalCases",
     "Cases increased since yesterday" = "changeCases",
-    "Deaths increased since yesterday" = "changeDeaths"
+    "Deaths increased since yesterday" = "changeDeaths",
+    "Vaccination doses %" = "vaccinationsPc",
+    "Total vaccination doses" = "totalVaccinations"
   )
 }
 
@@ -201,7 +213,6 @@ default_countries <- function() {
     'Ireland',
     'UK',
     'USA',
-    'Spain',
     'Belgium',
     'Italy'
   )

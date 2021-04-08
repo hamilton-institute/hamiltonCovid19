@@ -28,7 +28,8 @@ mod_summary_global_ui <- function(id){
       ),
       col_4(
         bs4Dash::bs4ValueBoxOutput(ns("highest14DayGlobal"), width = 12),
-        bs4Dash::bs4ValueBoxOutput(ns("highest14DayEurope"), width = 12)
+        #bs4Dash::bs4ValueBoxOutput(ns("highest14DayEurope"), width = 12)
+        bs4Dash::bs4ValueBoxOutput(ns("highestVaccination"), width = 12)
       )
     ),
     fluidRow(
@@ -39,7 +40,7 @@ mod_summary_global_ui <- function(id){
           inputId = ns("selVariable"),
           label = "Select variable",
           choices = get_summary_variables(),
-          selected = 'last14per100k',
+          selected = 'totalVaccinations',
           multiple = FALSE,
           width = "98%"
         )
@@ -128,19 +129,22 @@ mod_summary_global_server <- function(input, output, session, global_data) {
   })
 
   output$worstHitCountryBox <- bs4Dash::renderbs4ValueBox({
-
     worst_countries <- global_data %>%
       dplyr::filter(countriesAndTerritories != 'Global') %>%
-      dplyr::slice_max(totalDeaths, n = 1)
+      dplyr::slice_max(deathsPerMillion, n = 1)
+      #dplyr::slice_max(totalDeaths, n = 1)
 
     value_box_countries(
       tab = worst_countries,
       variable = totalDeaths,
-      title = "Most deaths overall: ",
+      title = "Most deaths per million people: ",
       icon = "arrow-up"
     )
 
   })
+
+
+
 
   output$highest14DayGlobal <- bs4Dash::renderbs4ValueBox({
 
@@ -160,20 +164,38 @@ mod_summary_global_server <- function(input, output, session, global_data) {
 
   })
 
-  output$highest14DayEurope <- bs4Dash::renderbs4ValueBox({
+  # output$highest14DayEurope <- bs4Dash::renderbs4ValueBox({
+  #
+  #   highest14Day <- latest_global_data() %>%
+  #     dplyr::filter(
+  #       countriesAndTerritories != 'Global',
+  #       continentExp == "Europe & Central Asia",
+  #       popData2019 > 1e6
+  #     ) %>%
+  #     dplyr::slice_max(last14per100k, n = 1)
+  #
+  #   value_box_countries(
+  #     tab = highest14Day,
+  #     variable = last14per100k,
+  #     title = "Highest 14-day cases per 100k in Europe & Central Asia: ",
+  #     icon = "arrow-up"
+  #   )
+  #
+  # })
 
-    highest14Day <- latest_global_data() %>%
+  output$highestVaccination <- bs4Dash::renderbs4ValueBox({
+
+    highestVaxx <- latest_global_data() %>%
       dplyr::filter(
         countriesAndTerritories != 'Global',
-        continentExp == "Europe & Central Asia",
         popData2019 > 1e6
       ) %>%
-      dplyr::slice_max(last14per100k, n = 1)
+      dplyr::slice_max(vaccinationsPer100k, n = 1)
 
     value_box_countries(
-      tab = highest14Day,
-      variable = last14per100k,
-      title = "Highest 14-day cases per 100k in Europe & Central Asia: ",
+      tab = highestVaxx,
+      variable = vaccinationsPer100k,
+      title = "Highest vaccination doses per 100k: ",
       icon = "arrow-up"
     )
 
@@ -243,7 +265,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
           ) %>%
           summaryTab_table()
 
-      } else if (input$selVariable == "last14per100k") {
+      } else if (input$selVariable %in% c("last14per100k","vaccinationsPc","totalVaccinations")) {
         latest_global_data() %>%
           dplyr::filter(
             countriesAndTerritories != "Global",

@@ -29,7 +29,8 @@ if (is.null(raw_global_data)) {
     "confirmed",
     "deaths",
     "population",
-    "region"
+    "region",
+    "total_vaccinations"
   )
 
   missing_columns <- needed_columns[
@@ -56,6 +57,7 @@ if (is.null(raw_global_data)) {
         compress = "xz"
       )
 
+
       global_data <- raw_global_data %>%
         dplyr::as_tibble() %>%
         dplyr::mutate(Date = as.Date(date, tryFormats = "%d/%m/%Y")) %>%
@@ -65,7 +67,8 @@ if (is.null(raw_global_data)) {
           totalCases = confirmed,
           totalDeaths = deaths,
           popData2019 = population,
-          continentExp = region
+          continentExp = region,
+          totalVaccinations = total_vaccinations
         ) %>%
         dplyr::mutate(
           countriesAndTerritories = dplyr::case_when(
@@ -89,6 +92,7 @@ if (is.null(raw_global_data)) {
       global_data <- global_data %>%
         dplyr::group_by(countriesAndTerritories) %>%
         dplyr::arrange(Date, .by_group = TRUE) %>%
+        tidyr::fill(totalVaccinations, .direction = "down") %>%
         dplyr::mutate(
           cases = totalCases - dplyr::lag(totalCases),
           deaths = totalDeaths - dplyr::lag(totalDeaths),
@@ -106,7 +110,16 @@ if (is.null(raw_global_data)) {
             align = "right",
             fill = 0
           ),
-          last14per100k = 1e5 * last14per100k / popData2019
+          last14per100k = 1e5 * last14per100k / popData2019,
+          last14deathsper100k = RcppRoll::roll_sum(
+            deaths,
+            14,
+            align = "right",
+            fill = 0
+          ),
+          last14deathsper100k = 1e5 * last14deathsper100k / popData2019,
+          vaccinationsPer100k = 1e5 * totalVaccinations / (2 * popData2019),
+          vaccinationsPc = 100 * totalVaccinations / (2 * popData2019)
         ) %>%
         dplyr::ungroup()
 

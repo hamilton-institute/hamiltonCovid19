@@ -52,7 +52,7 @@ create_sidebar <- function() {
         icon = "dashboard"
       ),
       bs4Dash::bs4SidebarMenuItem(
-        "Map",
+        "Ireland map",
         tabName = "map",
         icon = "map"
       ),
@@ -66,11 +66,11 @@ create_sidebar <- function() {
         tabName = "animations",
         icon = "chart-line"
       ),
-      bs4Dash::bs4SidebarMenuItem(
-        "Interventions",
-        tabName = "interventions",
-        icon = "user-plus"
-      ),
+      # bs4Dash::bs4SidebarMenuItem(
+      #   "Interventions",
+      #   tabName = "interventions",
+      #   icon = "user-plus"
+      # ),
       bs4Dash::bs4SidebarMenuItem(
         "Sources",
         tabName = "sources",
