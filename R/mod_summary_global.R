@@ -265,7 +265,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
           ) %>%
           summaryTab_table()
 
-      } else if (input$selVariable %in% c("last14per100k","vaccinationsPc")) {
+      } else if (input$selVariable %in% c("last14per100k","last14deathsper100k","vaccinationsPc")) {
         latest_global_data() %>%
           dplyr::filter(
             countriesAndTerritories != "Global",
