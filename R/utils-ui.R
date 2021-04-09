@@ -151,9 +151,8 @@ get_graph_variables <- function() {
     'Logp1 daily deaths' = 'logp1Deaths',
     'Cases per million population' = 'casesPerMillion',
     'Deaths per million population' = 'deathsPerMillion',
-    'Total vaccination doses' = 'totalVaccinations',
-    'Total vaccination doses per 100k population' = 'vaccinationsPer100k',
-    "Vaccination doses % of population" = "vaccinationsPc"
+    'Vaccination doses' = 'totalVaccinations',
+    "Vaccination doses per 100k population" = "vaccinationDosesPer100k"
   )
 }
 
@@ -174,9 +173,8 @@ get_anim_variables <- function() {
     'Logp1 cumulative deaths' = 'logp1TotalDeaths',
     'Cumulative cases per million population' = 'casesPerMillion',
     'Cumulative deaths per million population' = 'deathsPerMillion',
-    'Total vaccination doses' = 'totalVaccinations',
-    'Total vaccination doses per 100k population' = 'vaccinationsPer100k',
-    "Vaccination doses % of population" = "vaccinationsPc"
+    'Vaccination doses' = 'totalVaccinations',
+    'Vaccination doses per 100k population' = 'vaccinationDosesPer100k'
   )
 }
 
@@ -188,8 +186,8 @@ get_summary_variables <- function() {
     "Total cases" = "totalCases",
     "Cases increased since yesterday" = "changeCases",
     "Deaths increased since yesterday" = "changeDeaths",
-    "Vaccination doses % of population" = "vaccinationsPc",
-    "Total vaccination doses" = "totalVaccinations"
+    "Vaccination doses per 100k population" = "vaccinationDosesPer100k",
+    "Vaccination doses" = "totalVaccinations"
     # "Hospitalisations" = "hospPatients",
     # "ICU admissions" = "icuPatients",
     # "Hospitalisations per 100k population" = "hospPer100k",

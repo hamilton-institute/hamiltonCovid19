@@ -124,8 +124,7 @@ if (is.null(raw_global_data)) {
             fill = 0
           ),
           last14deathsper100k = 1e5 * last14deathsper100k / popData2019,
-          vaccinationsPer100k = 1e5 * totalVaccinations / (2 * popData2019),
-          vaccinationsPc = 100 * totalVaccinations / (2 * popData2019),
+          vaccinationDosesPer100k = 1e5 * totalVaccinations / popData2019,
           hospPer100k = 1e5 * hospPatients / popData2019,
           icuPer100k = 1e5 * icuPatients / popData2019,
         ) %>%

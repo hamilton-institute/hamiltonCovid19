@@ -190,11 +190,11 @@ mod_summary_global_server <- function(input, output, session, global_data) {
         countriesAndTerritories != 'Global',
         popData2019 > 1e6
       ) %>%
-      dplyr::slice_max(vaccinationsPer100k, n = 1)
+      dplyr::slice_max(vaccinationDosesPer100k, n = 1)
 
     value_box_countries(
       tab = highestVaxx,
-      variable = vaccinationsPer100k,
+      variable = vaccinationDosesPer100k,
       title = "Highest vaccination doses per 100k: ",
       icon = "arrow-up"
     )
@@ -240,7 +240,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
   })
 
   output$customTable <- reactable::renderReactable({
-    if (input$selVariable %in% c("cases", "totalCases","totalVaccinations")) {
+    if (input$selVariable %in% c("cases", "totalCases","totalVaccinations","vaccinationDosesPer100k")) {
       latest_global_data() %>%
         dplyr::filter(countriesAndTerritories != "Global") %>%
         dplyr::arrange(desc(.data[[input$selVariable]])) %>%
@@ -265,7 +265,7 @@ mod_summary_global_server <- function(input, output, session, global_data) {
           ) %>%
           summaryTab_table()
 
-      } else if (input$selVariable %in% c("last14per100k","last14deathsper100k","vaccinationsPc")) {
+      } else if (input$selVariable %in% c("last14per100k","last14deathsper100k")) {
         latest_global_data() %>%
           dplyr::filter(
             countriesAndTerritories != "Global",
