@@ -5,7 +5,7 @@ account: apmuhamilton
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 2973832
-bundleId: 4484538
+bundleId: 4484668
 url: https://apmuhamilton.shinyapps.io/hamiltonCovid19Dashboard/
-when: 1618687905.00458
-lastSyncTime: 1618687905.00459
+when: 1618691495.59645
+lastSyncTime: 1618691495.59646
